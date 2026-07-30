@@ -54,17 +54,40 @@ assets/css/     main.css (the house style) + self-hosted @font-face rules
 assets/js/      tracklist filtering and sorting, mobile nav
 content/        evaluations/, analyses/, and standalone pages
 layouts/        baseof, home, section, taxonomy and single templates + partials
-static/fonts/   Anton, Barlow Condensed, Inter, IBM Plex Mono (latin subset, woff2)
+static/fonts/   Anton, Barlow Condensed, Literata, Spline Sans Mono (latin subset, woff2)
 ```
 
 ## Design notes
 
-Late-nineties club-flyer logic applied to dataset reviews: black canvas, chrome gradient wordmark,
-hazard stripes, Anton display type, tracklists numbered like a compilation sleeve, and scorecards
-rendered as EQ faders. Two accents — a hot orange-red and an acid yellow — over silver.
+Full design context — audience, brand personality, principles — lives in `.impeccable.md` and is
+mirrored into `CLAUDE.md`. Read it before changing anything visual.
 
-`--hot` is for text on black; `--hot-deep` carries white text at WCAG AA. Animation is
-suppressed under `prefers-reduced-motion`, and there is a print stylesheet.
+Late-nineties compilation-sleeve logic applied to dataset reviews: black stock, hazard stripes,
+hand-set headlines, a numbered tracklist, scorecards drawn as EQ faders. The governing rule is
+**loud shell, calm core** — full volume on the furniture, quiet and generously led in the article
+body, because the reviews run 500+ words.
+
+**Colour** is OKLCH throughout, so equal steps in lightness look equal. Neutrals are tinted toward
+the brand hue (32°, red-orange) rather than the reflexive cool blue, which makes the greys and the
+accent read as one material. `--hot` is for text on black; `--hot-deep` carries white text. Every
+foreground/background pair in the palette clears WCAG AA.
+
+**Chrome is a seal, not a style.** Metallic fill is restricted to three elements — the masthead
+wordmark, the hero H1 and the scorecard grade seal. It is deliberately absent from body text, nav,
+labels, buttons and the stat figures, which are solid ink. Spreading it further turns a mark of
+authority into wallpaper.
+
+**Type** pairs a heavy condensed display face with a serif body: Anton for headlines, Barlow
+Condensed for UI and track titles, Literata for reading, Spline Sans Mono for data and numerals.
+A serif body on a data site is against the reflex, and that is the point — it gives the
+print-journalism register that partisan criticism needs.
+
+**Tokens**: a 4pt spacing scale with semantic names (`--space-sm`, not `--spacing-8`), a five-step
+type scale at roughly 1.28 ratio, fluid `clamp()` only where type is genuinely display-scale, and
+exponential ease-out curves. Nothing animates a layout property. Components that need to respond to
+their column rather than the viewport use `@container`.
+
+Animation is suppressed under `prefers-reduced-motion`, and there is a print stylesheet.
 
 ## Content
 
