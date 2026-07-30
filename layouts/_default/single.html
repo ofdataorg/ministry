@@ -1,0 +1,30 @@
+{{ define "main" }}
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">
+      {{ if .Section }}<a href="{{ (printf "/%s" .Section) | relURL }}">{{ .Section | humanize }}</a>{{ else }}{{ site.Title }}{{ end }}
+      {{ if .Params.domains }}<span class="pagehead__sep">/</span>{{ delimit .Params.domains " · " }}{{ end }}
+    </p>
+    <h1 class="pagehead__title">{{ .Title }}</h1>
+    {{ with .Description }}<p class="pagehead__verdict">{{ . }}</p>{{ end }}
+    {{ if and .Date (not .Params.hidedate) }}
+      <p class="pagehead__meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 January 2006" }}</time>{{ with .Params.author }} · {{ . }}{{ end }} · {{ .ReadingTime }} min read</p>
+    {{ end }}
+  </div>
+</header>
+
+<div class="wrap layout {{ if not .Params.toc }}layout--single{{ end }}">
+  <article class="layout__main prose">
+    {{ .Content }}
+  </article>
+
+  {{ if .Params.toc }}
+    <aside class="layout__side">
+      <div class="card card--tight toc">
+        <div class="card__head"><h2 class="card__title">Contents</h2></div>
+        {{ .TableOfContents }}
+      </div>
+    </aside>
+  {{ end }}
+</div>
+{{ end }}

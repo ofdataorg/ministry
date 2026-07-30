@@ -1,0 +1,53 @@
+{{ define "main" }}
+{{ $pages := .RegularPagesRecursive }}
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">Section 01</p>
+    <h1 class="pagehead__title chrome">{{ .Title }}</h1>
+    {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  <div class="filters" data-filters>
+    <div class="filters__row">
+      <span class="filters__label">Sort</span>
+      <div class="segmented" role="group" aria-label="Sort evaluations">
+        <button type="button" class="seg is-on" data-sort="date">Newest</button>
+        <button type="button" class="seg" data-sort="score">Top scored</button>
+        <button type="button" class="seg" data-sort="title">A–Z</button>
+      </div>
+    </div>
+
+    <div class="filters__row">
+      <span class="filters__label">Region</span>
+      <div class="filters__chips">
+        <button type="button" class="chip chip--btn is-on" data-facet="regions" data-value="">All</button>
+        {{ range site.Taxonomies.regions.Alphabetical }}
+          <button type="button" class="chip chip--btn" data-facet="regions" data-value="{{ .Page.Data.Term | urlize }}">{{ .Page.Title }}<span class="chip__n">{{ .Count }}</span></button>
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="filters__row">
+      <span class="filters__label">Domain</span>
+      <div class="filters__chips">
+        <button type="button" class="chip chip--btn is-on" data-facet="domains" data-value="">All</button>
+        {{ range site.Taxonomies.domains.Alphabetical }}
+          <button type="button" class="chip chip--btn" data-facet="domains" data-value="{{ .Page.Data.Term | urlize }}">{{ .Page.Title }}<span class="chip__n">{{ .Count }}</span></button>
+        {{ end }}
+      </div>
+    </div>
+
+    <p class="filters__count" data-count aria-live="polite">{{ len $pages }} evaluations</p>
+  </div>
+
+  <ol class="tracks" data-tracklist>
+    {{ range $i, $p := $pages }}
+      {{ partial "track.html" (dict "page" $p "index" (add $i 1)) }}
+    {{ end }}
+  </ol>
+
+  <p class="tracks__empty" data-empty hidden>Nothing on file for that combination — yet.</p>
+</div>
+{{ end }}

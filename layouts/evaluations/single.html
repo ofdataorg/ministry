@@ -1,0 +1,108 @@
+{{ define "main" }}
+{{ $p := . }}
+{{ $score := partial "func/score.html" . }}
+
+<header class="pagehead pagehead--eval">
+  <div class="wrap">
+    <p class="pagehead__kicker">
+      <a href="{{ "evaluations" | relURL }}">Evaluations</a>
+      {{ with .Params.regions }}<span class="pagehead__sep">/</span>{{ delimit . " · " }}{{ end }}
+    </p>
+    <h1 class="pagehead__title">{{ .Title }}</h1>
+    {{ with .Params.verdict }}<p class="pagehead__verdict">“{{ . }}”</p>{{ end }}
+
+    <ul class="taglist">
+      {{ range .Params.domains }}<li><a class="tag" href="{{ (printf "/domains/%s" (. | urlize)) | relURL }}">{{ . }}</a></li>{{ end }}
+      {{ range .Params.licenses }}<li><a class="tag tag--ghost" href="{{ (printf "/licenses/%s" (. | urlize)) | relURL }}">{{ . }}</a></li>{{ end }}
+    </ul>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <article class="layout__main">
+    {{ partial "scorecard.html" . }}
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+
+    {{ if or .Params.strengths .Params.weaknesses }}
+    <div class="verdictgrid">
+      {{ with .Params.strengths }}
+        <div class="verdictgrid__col verdictgrid__col--up">
+          <h2 class="verdictgrid__h">Holds up</h2>
+          <ul>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ul>
+        </div>
+      {{ end }}
+      {{ with .Params.weaknesses }}
+        <div class="verdictgrid__col verdictgrid__col--down">
+          <h2 class="verdictgrid__h">Falls down</h2>
+          <ul>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ul>
+        </div>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    {{ with .Params.source }}
+      <p class="sourcelink"><a class="btn btn--hot" href="{{ . }}" rel="noopener external">Go to the dataset ↗</a></p>
+    {{ end }}
+  </article>
+
+  <aside class="layout__side">
+    <div class="card spec">
+      <div class="card__head"><h2 class="card__title">Spec sheet</h2></div>
+      <dl class="spec__list">
+        {{ with .Params.publishers }}<div><dt>Publisher</dt><dd>{{ delimit . ", " }}</dd></div>{{ end }}
+        {{ with .Params.regions }}<div><dt>Coverage</dt><dd>{{ delimit . ", " }}</dd></div>{{ end }}
+        {{ with .Params.temporal }}<div><dt>Time span</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.updated }}<div><dt>Last update</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.cadence }}<div><dt>Cadence</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.formats }}<div><dt>Formats</dt><dd>{{ delimit . ", " }}</dd></div>{{ end }}
+        {{ with .Params.size }}<div><dt>Size</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.access }}<div><dt>Access</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.licenses }}<div><dt>Licence</dt><dd>{{ delimit . ", " }}</dd></div>{{ end }}
+      </dl>
+    </div>
+
+    {{ with .Params.bestfor }}
+      <div class="card card--tight">
+        <div class="card__head"><h2 class="card__title">Reach for it when</h2></div>
+        <ul class="ticklist">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+      </div>
+    {{ end }}
+
+    {{ with .Params.avoidfor }}
+      <div class="card card--tight card--warn">
+        <div class="card__head"><h2 class="card__title">Do not use it for</h2></div>
+        <ul class="ticklist ticklist--x">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+      </div>
+    {{ end }}
+
+    <p class="side__stamp">Scored {{ .Date.Format "02 Jan 2006" }}{{ with .Params.reviewer }}<br>by {{ . }}{{ end }}</p>
+  </aside>
+</div>
+
+{{ $related := first 3 (where (where site.RegularPages "Type" "evaluations") "Permalink" "!=" .Permalink) }}
+{{ with .Params.domains }}
+  {{ $d := index . 0 }}
+  {{ $sameDomain := where (where site.RegularPages "Type" "evaluations") "Params.domains" "intersect" (slice $d) }}
+  {{ $rel := where $sameDomain "Permalink" "!=" $p.Permalink }}
+  {{ if $rel }}{{ $related = first 3 $rel }}{{ end }}
+{{ end }}
+
+{{ with $related }}
+<section class="wrap band">
+  <div class="band__head"><h2 class="band__title">Filed alongside</h2></div>
+  <ol class="tracks">
+    {{ range $i, $r := . }}
+      {{ partial "track.html" (dict "page" $r "index" (add $i 1)) }}
+    {{ end }}
+  </ol>
+</section>
+{{ end }}
+
+<nav class="pagenav wrap" aria-label="More evaluations">
+  {{ with .PrevInSection }}<a class="pagenav__link" href="{{ .RelPermalink }}"><span>← Previous</span>{{ .Title }}</a>{{ end }}
+  {{ with .NextInSection }}<a class="pagenav__link pagenav__link--next" href="{{ .RelPermalink }}"><span>Next →</span>{{ .Title }}</a>{{ end }}
+</nav>
+{{ end }}

@@ -1,0 +1,94 @@
+{{ define "main" }}
+{{ $evals := where site.RegularPages "Type" "evaluations" }}
+{{ $analyses := where site.RegularPages "Type" "analyses" }}
+
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="wrap hero__in">
+    <p class="hero__eyebrow"><span class="tag tag--hot">{{ site.Params.issue }}</span> The open-data review</p>
+
+    <h1 class="hero__title">
+      <span class="chrome">Ministry</span>
+      <span class="hero__of">of</span>
+      <span class="chrome">Data</span>
+    </h1>
+
+    <p class="hero__lede">{{ site.Params.description }} Scored on six axes, argued in full, and never a number without its working.</p>
+
+    <div class="hero__cta">
+      <a class="btn btn--hot" href="{{ "evaluations" | relURL }}">Read the evaluations</a>
+      <a class="btn btn--ghost" href="{{ "method" | relURL }}">How we score</a>
+    </div>
+
+    <dl class="stats">
+      <div class="stats__item"><dt>Datasets on file</dt><dd>{{ len $evals }}</dd></div>
+      <div class="stats__item"><dt>Regions covered</dt><dd>{{ len site.Taxonomies.regions }}</dd></div>
+      <div class="stats__item"><dt>Domains</dt><dd>{{ len site.Taxonomies.domains }}</dd></div>
+      <div class="stats__item"><dt>Long-form analyses</dt><dd>{{ len $analyses }}</dd></div>
+    </dl>
+  </div>
+</section>
+
+{{ partial "ticker.html" . }}
+
+<section class="wrap band">
+  <div class="band__head">
+    <h2 class="band__title">The tracklist</h2>
+    <p class="band__note">Latest dataset evaluations, newest first</p>
+    <a class="band__more" href="{{ "evaluations" | relURL }}">All {{ len $evals }} →</a>
+  </div>
+
+  <ol class="tracks">
+    {{ range $i, $p := first 8 $evals }}
+      {{ partial "track.html" (dict "page" $p "index" (add $i 1)) }}
+    {{ end }}
+  </ol>
+</section>
+
+{{ with $analyses }}
+<section class="band band--alt">
+  <div class="wrap">
+    <div class="band__head">
+      <h2 class="band__title">The mixes</h2>
+      <p class="band__note">Long-form analyses cutting across many datasets</p>
+      <a class="band__more" href="{{ "analyses" | relURL }}">All {{ len . }} →</a>
+    </div>
+
+    <div class="grid grid--3">
+      {{ range first 3 . }}
+        <article class="card card--mix">
+          <span class="card__kicker">{{ with .Params.domains }}{{ index . 0 }}{{ else }}Analysis{{ end }}</span>
+          <h3 class="card__h"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <p class="card__p">{{ .Summary | plainify | truncate 150 }}</p>
+          <p class="card__foot"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time> · {{ .ReadingTime }} min</p>
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<section class="wrap band">
+  <div class="band__head">
+    <h2 class="band__title">Worldwide</h2>
+    <p class="band__note">Every dataset we hold, filed by where it comes from</p>
+    <a class="band__more" href="{{ "regions" | relURL }}">Index →</a>
+  </div>
+
+  <ul class="chips">
+    {{ range site.Taxonomies.regions.ByCount }}
+      <li><a class="chip" href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="chip__n">{{ .Count }}</span></a></li>
+    {{ end }}
+  </ul>
+</section>
+
+<section class="promo">
+  <div class="wrap promo__in">
+    <div>
+      <h2 class="promo__title">Got a dataset that deserves the treatment?</h2>
+      <p class="promo__p">We take submissions from anyone — publishers, journalists, researchers, and the people stuck cleaning it at 2am. No fee, no favours, and we publish the score we land on.</p>
+    </div>
+    <a class="btn btn--hot btn--big" href="{{ "submit" | relURL }}">Submit a dataset</a>
+  </div>
+</section>
+{{ end }}

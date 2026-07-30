@@ -1,0 +1,40 @@
+{{- $p := . -}}
+{{- $score := partial "func/score.html" $p -}}
+{{- $grade := partial "func/grade.html" $score -}}
+{{- $tier := "low" -}}
+{{- if ge $score 7.8 }}{{ $tier = "high" }}{{ else if ge $score 5.8 }}{{ $tier = "mid" }}{{ end -}}
+
+<section class="card scorecard" aria-labelledby="scorecard-h">
+  <div class="card__head">
+    <h2 class="card__title" id="scorecard-h">The Scorecard</h2>
+    <span class="card__meta">SIX AXES / 10 EACH</span>
+  </div>
+
+  <div class="scorecard__body">
+    <div class="scorecard__meters">
+      {{ range site.Params.scorecard.axes }}
+        {{ $v := float (index $p.Params.scores . | default 0) }}
+        {{ $pct := mul (div $v 10.0) 100 }}
+        <div class="meter" style="--pct:{{ $pct }}%">
+          <span class="meter__label">{{ . }}</span>
+          <span class="meter__track" role="img" aria-label="{{ . }}: {{ $v }} out of 10">
+            <span class="meter__fill"></span>
+            <span class="meter__ticks" aria-hidden="true"></span>
+          </span>
+          <span class="meter__val">{{ lang.FormatNumber 0 $v }}</span>
+        </div>
+      {{ end }}
+    </div>
+
+    <div class="scorecard__seal scorecard__seal--{{ $tier }}">
+      <span class="seal__label">Overall</span>
+      <span class="seal__grade">{{ $grade }}</span>
+      <span class="seal__num">{{ lang.FormatNumber 1 $score }}<span class="seal__den">/10</span></span>
+      {{ with $p.Params.verdict }}<p class="seal__verdict">“{{ . }}”</p>{{ end }}
+    </div>
+  </div>
+
+  {{ with $p.Params.reviewed }}
+    <p class="scorecard__foot">Reviewed {{ dateFormat "2 January 2006" $p.Date }}{{ with $p.Params.reviewer }} by {{ . }}{{ end }} · Snapshot taken {{ . }}</p>
+  {{ end }}
+</section>

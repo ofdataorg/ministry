@@ -1,0 +1,43 @@
+{{ define "main" }}
+{{ $pages := .Pages }}
+{{ $evals := where $pages "Type" "evaluations" }}
+{{ $rest := where $pages "Type" "!=" "evaluations" }}
+
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">{{ .Data.Plural | humanize }} · {{ len $pages }} filed</p>
+    <h1 class="pagehead__title chrome">{{ .Title }}</h1>
+    {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  {{ with $evals }}
+    <div class="band__head">
+      <h2 class="band__title">Evaluations</h2>
+      <p class="band__note">{{ len . }} scored dataset{{ if ne (len .) 1 }}s{{ end }}</p>
+    </div>
+    <ol class="tracks">
+      {{ range $i, $p := . }}
+        {{ partial "track.html" (dict "page" $p "index" (add $i 1)) }}
+      {{ end }}
+    </ol>
+  {{ end }}
+
+  {{ with $rest }}
+    <div class="band__head band__head--spaced">
+      <h2 class="band__title">Analyses</h2>
+    </div>
+    <div class="grid grid--3">
+      {{ range . }}
+        <article class="card card--mix">
+          <span class="card__kicker">{{ .Type | humanize }}</span>
+          <h3 class="card__h"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <p class="card__p">{{ .Summary | plainify | truncate 150 }}</p>
+          <p class="card__foot"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time></p>
+        </article>
+      {{ end }}
+    </div>
+  {{ end }}
+</div>
+{{ end }}

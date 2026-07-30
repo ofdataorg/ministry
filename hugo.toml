@@ -1,0 +1,69 @@
+baseURL = 'https://odataorg.github.io/ministry/'
+languageCode = 'en-gb'
+title = 'Ministry of Data'
+enableRobotsTXT = true
+enableEmoji = false
+summaryLength = 30
+
+[pagination]
+  pagerSize = 12
+
+[taxonomies]
+  region = 'regions'
+  domain = 'domains'
+  publisher = 'publishers'
+  license = 'licenses'
+
+[params]
+  description = 'Independent evaluations and analyses of open datasets from all over the world.'
+  strapline = 'Evaluations & analyses of open data, worldwide'
+  established = 1998
+  issue = 'VOL. 01'
+  ticker = [
+    'INDEPENDENT DATASET EVALUATIONS',
+    'SCORED ON SIX AXES',
+    'NO VENDOR MONEY',
+    'EVERY CLAIM REPRODUCIBLE',
+    'OPEN DATA — WORLDWIDE',
+  ]
+  [params.scorecard]
+    axes = ['completeness', 'timeliness', 'documentation', 'accessibility', 'licensing', 'interoperability']
+
+[menus]
+  [[menus.main]]
+    name = 'Evaluations'
+    pageRef = '/evaluations'
+    weight = 10
+  [[menus.main]]
+    name = 'Analyses'
+    pageRef = '/analyses'
+    weight = 20
+  [[menus.main]]
+    name = 'Regions'
+    pageRef = '/regions'
+    weight = 30
+  [[menus.main]]
+    name = 'Method'
+    pageRef = '/method'
+    weight = 40
+  [[menus.main]]
+    name = 'Submit'
+    pageRef = '/submit'
+    weight = 50
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    style = 'monokai'
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+
+[outputs]
+  home = ['HTML', 'RSS']
+  section = ['HTML', 'RSS']
+
+[services.rss]
+  limit = 30

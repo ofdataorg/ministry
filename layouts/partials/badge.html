@@ -1,0 +1,8 @@
+{{- $score := partial "func/score.html" . -}}
+{{- $grade := partial "func/grade.html" $score -}}
+{{- $tier := "low" -}}
+{{- if ge $score 7.8 }}{{ $tier = "high" }}{{ else if ge $score 5.8 }}{{ $tier = "mid" }}{{ end -}}
+<span class="badge badge--{{ $tier }}" title="Overall {{ lang.FormatNumber 1 $score }} out of 10">
+  <span class="badge__grade">{{ $grade }}</span>
+  <span class="badge__num">{{ lang.FormatNumber 1 $score }}</span>
+</span>

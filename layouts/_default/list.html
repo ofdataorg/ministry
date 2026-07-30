@@ -1,0 +1,27 @@
+{{ define "main" }}
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">{{ if .IsSection }}Section{{ else }}Index{{ end }}</p>
+    <h1 class="pagehead__title chrome">{{ .Title }}</h1>
+    {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  {{ $pages := .RegularPagesRecursive }}
+  {{ if $pages }}
+    <div class="grid grid--3">
+      {{ range $pages }}
+        <article class="card card--mix">
+          <span class="card__kicker">{{ with .Params.domains }}{{ index . 0 }}{{ else }}{{ .Type | humanize }}{{ end }}</span>
+          <h2 class="card__h"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <p class="card__p">{{ .Summary | plainify | truncate 170 }}</p>
+          <p class="card__foot"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time> · {{ .ReadingTime }} min</p>
+        </article>
+      {{ end }}
+    </div>
+  {{ else }}
+    <p class="tracks__empty">Nothing filed here yet.</p>
+  {{ end }}
+</div>
+{{ end }}

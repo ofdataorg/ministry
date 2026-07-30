@@ -1,0 +1,12 @@
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    {{ range seq 2 }}
+      <div class="ticker__set">
+        {{ range site.Params.ticker }}
+          <span class="ticker__item">{{ . }}</span>
+          <span class="ticker__dot">●</span>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</div>

@@ -1,0 +1,22 @@
+{{ define "main" }}
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">Index</p>
+    <h1 class="pagehead__title chrome">{{ .Title }}</h1>
+    {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  <ul class="termgrid">
+    {{ range .Data.Terms.ByCount }}
+      <li class="termgrid__item">
+        <a href="{{ .Page.RelPermalink }}">
+          <span class="termgrid__n">{{ printf "%02d" .Count }}</span>
+          <span class="termgrid__name">{{ .Page.Title }}</span>
+        </a>
+      </li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}

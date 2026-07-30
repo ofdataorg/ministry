@@ -1,0 +1,18 @@
+{{- $id := printf "lg%d" (add 1 (len .Title)) -}}
+<svg class="logo" viewBox="0 0 64 64" role="img" aria-label="Ministry of Data" focusable="false">
+  <defs>
+    <linearGradient id="chrome-{{ $id }}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="38%"  stop-color="#b6bec8"/>
+      <stop offset="50%"  stop-color="#4c545d"/>
+      <stop offset="62%"  stop-color="#eef2f6"/>
+      <stop offset="100%" stop-color="#7c848d"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="#000"/>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="url(#chrome-{{ $id }})" stroke-width="3"/>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="#ff2e00" stroke-width="2"/>
+  <path d="M6 40 L58 24 L58 33 L6 49 Z" fill="#ff2e00" opacity=".9"/>
+  <path d="M13 41 V23 h5.4 l5.1 9.6 5.1-9.6H34 v18 h-5.3 v-8.9l-4.2 8.9h-2.6l-4.2-8.9V41Z" fill="#fff"/>
+  <path d="M38 23 h8.2c5.6 0 9.3 3.5 9.3 9s-3.7 9-9.3 9H38Zm5.4 4.4v9.2h2.5c2.7 0 4.3-1.7 4.3-4.6s-1.6-4.6-4.3-4.6Z" fill="#fff"/>
+</svg>

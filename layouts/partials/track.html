@@ -1,0 +1,29 @@
+{{- $p := .page -}}
+{{- $i := .index -}}
+{{- $score := partial "func/score.html" $p -}}
+{{- $regions := delimit (apply ($p.Params.regions | default slice) "urlize" ".") "|" -}}
+{{- $domains := delimit (apply ($p.Params.domains | default slice) "urlize" ".") "|" -}}
+<li class="track"
+    style="--score:{{ mul (div $score 10.0) 100 }}%"
+    data-score="{{ lang.FormatNumber 2 $score }}"
+    data-date="{{ $p.Date.Format "20060102" }}"
+    data-title="{{ lower $p.Title }}"
+    data-regions="{{ $regions }}"
+    data-domains="{{ $domains }}">
+  <a class="track__hit" href="{{ $p.RelPermalink }}">
+    <span class="track__no">{{ printf "%02d" $i }}</span>
+
+    <span class="track__body">
+      <span class="track__title">{{ $p.Title }}</span>
+      <span class="track__sub">
+        {{ with $p.Params.publishers }}<span class="track__pub">{{ delimit . " / " }}</span>{{ end }}
+        {{ with $p.Params.regions }}<span class="track__dot">·</span><span>{{ delimit . " / " }}</span>{{ end }}
+        {{ with $p.Params.domains }}<span class="track__dot">·</span><span>{{ delimit . " / " }}</span>{{ end }}
+      </span>
+      {{ with $p.Params.verdict }}<span class="track__verdict">{{ . }}</span>{{ end }}
+    </span>
+
+    <span class="track__bar" aria-hidden="true"><span class="track__barfill"></span></span>
+    {{ partial "badge.html" $p }}
+  </a>
+</li>

@@ -1,0 +1,41 @@
+<div class="stripbar" aria-hidden="true"></div>
+
+<div class="topline">
+  <div class="wrap topline__in">
+    <span class="topline__item">{{ site.Params.issue }}</span>
+    <span class="topline__sep">/</span>
+    <span class="topline__item">EST. {{ site.Params.established }}</span>
+    <span class="topline__sep">/</span>
+    <span class="topline__item topline__item--wide">{{ len (where site.RegularPages "Type" "evaluations") }} DATASETS ON FILE</span>
+    <span class="topline__spacer"></span>
+    <a class="topline__item topline__link" href="{{ "index.xml" | relURL }}">RSS</a>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap masthead__in">
+    <a class="brand" href="{{ "/" | relURL }}">
+      {{ partial "logo.html" . }}
+      <span class="brand__text">
+        <span class="brand__name">Ministry<span class="brand__of"> of </span>Data</span>
+        <span class="brand__sub">{{ site.Params.strapline }}</span>
+      </span>
+    </a>
+
+    <button class="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav" id="nav" aria-label="Primary">
+      <ul class="nav__list">
+        {{ $cur := . }}
+        {{ range site.Menus.main }}
+          {{ $active := or ($cur.IsMenuCurrent "main" .) ($cur.HasMenuCurrent "main" .) }}
+          <li class="nav__item">
+            <a class="nav__link{{ if $active }} is-active{{ end }}" href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+          </li>
+        {{ end }}
+      </ul>
+    </nav>
+  </div>
+</header>

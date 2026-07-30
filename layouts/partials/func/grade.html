@@ -1,0 +1,14 @@
+{{- /* Maps a 0–10 score to a letter grade. */ -}}
+{{- $s := float . -}}
+{{- $g := "E" -}}
+{{- if ge $s 9.2 -}}{{- $g = "A+" -}}
+{{- else if ge $s 8.5 -}}{{- $g = "A" -}}
+{{- else if ge $s 7.8 -}}{{- $g = "A−" -}}
+{{- else if ge $s 7.2 -}}{{- $g = "B+" -}}
+{{- else if ge $s 6.5 -}}{{- $g = "B" -}}
+{{- else if ge $s 5.8 -}}{{- $g = "B−" -}}
+{{- else if ge $s 5.0 -}}{{- $g = "C+" -}}
+{{- else if ge $s 4.2 -}}{{- $g = "C" -}}
+{{- else if ge $s 3.0 -}}{{- $g = "D" -}}
+{{- end -}}
+{{- return $g -}}

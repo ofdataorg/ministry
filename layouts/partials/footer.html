@@ -1,0 +1,41 @@
+{{ partial "ticker.html" . }}
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <div class="foot__brand">
+      {{ partial "logo.html" . }}
+      <p class="foot__blurb">{{ site.Params.description }}</p>
+      <p class="foot__stamp">NO VENDOR MONEY · NO SPONSORED ENTRIES · EVERY SCORE SHOWS ITS WORKING</p>
+    </div>
+
+    <div class="foot__cols">
+      <div class="foot__col">
+        <h3 class="foot__h">Sections</h3>
+        <ul>
+          {{ range site.Menus.main }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h3 class="foot__h">Top regions</h3>
+        <ul>
+          {{ range first 6 site.Taxonomies.regions.ByCount }}
+            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="foot__n">{{ .Count }}</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h3 class="foot__h">Domains</h3>
+        <ul>
+          {{ range first 6 site.Taxonomies.domains.ByCount }}
+            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="foot__n">{{ .Count }}</span></a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap foot__legal">
+    <span>© {{ now.Year }} {{ site.Title }}. Text released under CC BY 4.0.</span>
+    <span class="foot__cat">CAT. NO. MOD-{{ site.Params.established }}-{{ printf "%03d" (len (where site.RegularPages "Type" "evaluations")) }}</span>
+  </div>
+</footer>
