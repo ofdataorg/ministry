@@ -6,7 +6,7 @@ scored on six axes with the working published every time.
 Built with [Hugo](https://gohugo.io/) (extended, 0.128+). No external theme — the layouts, CSS and
 fonts all live in this repository, and the site makes no runtime requests to third parties.
 
-Live at <https://odataorg.github.io/ministry/>.
+Live at <https://ofdataorg.github.io/ministry/>.
 
 ## Running it locally
 
