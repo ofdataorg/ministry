@@ -696,6 +696,35 @@ a.tag:hover { background: var(--hot-deep); border-color: var(--hot-deep); color:
   .meter { grid-template-columns: 6.5rem 1fr 1.75rem; gap: var(--space-2xs); }
 }
 
+/* ---------- corrections ----------
+   We publish these visibly, per /method/. Hazard bar on top, full
+   border — not a side stripe, which reads as a template alert. */
+.correction {
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+.correction::before {
+  content: ""; display: block;
+  width: 5rem; height: 6px; margin-bottom: var(--space-sm);
+  background: var(--hazard);
+}
+.correction__label {
+  margin: 0 0 var(--space-2xs);
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--hot);
+}
+.correction__list { list-style: none; display: grid; gap: var(--space-2xs); }
+.correction__list li { display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--space-2xs); }
+.correction__list time {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dim); padding-top: .25em;
+}
+.correction__list p { margin: 0; }
+.correction__list span { color: var(--muted); font-size: var(--text-sm); line-height: 1.55; }
+@media (max-width: 560px) { .correction__list li { grid-template-columns: 1fr; } }
+
 /* ---------- spec sheet ---------- */
 .spec__list { margin: 0; padding: var(--space-3xs) var(--space-sm) var(--space-sm); }
 .spec__list > div {

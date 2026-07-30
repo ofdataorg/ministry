@@ -20,6 +20,20 @@
 
 <div class="wrap layout">
   <article class="layout__main">
+    {{ with .Params.corrections }}
+      <aside class="correction" aria-label="Corrections to this evaluation">
+        <p class="correction__label">{{ if gt (len .) 1 }}Corrections{{ else }}Correction{{ end }}</p>
+        <ul class="correction__list">
+          {{ range . }}
+            <li>
+              <time datetime="{{ .date }}">{{ dateFormat "2 Jan 2006" .date }}</time>
+              <span>{{ .text | markdownify }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      </aside>
+    {{ end }}
+
     {{ partial "scorecard.html" . }}
 
     <div class="prose">

@@ -8,18 +8,22 @@ licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/"
 temporal: "Varies by dataset; several statistical series run back decades"
-updated: "Continuously for the automated feeds; much of the rest has not moved in years"
-cadence: "Not stated on a single dataset in the catalogue"
+updated: "Continuously for the automated feeds; half the catalogue is declared one-off"
+cadence: "Declared on all 702 via dcat:accrualPeriodicity; 82.4% of testable promises honoured"
 formats: ["CSV", "JSON", "GeoJSON", "Parquet", "XLSX", "SHP", "GPX"]
 size: "702 datasets, 43,031,850 records"
 access: "Open API and bulk download, no registration"
 
-verdict: "One of the cleanest municipal licences in Europe wrapped around a catalogue where the machines keep their promises and the humans do not."
+verdict: "One of the cleanest municipal licences in Europe, and a catalogue that tells the machines exactly what it intends to do while telling the reader almost nothing."
 reviewer: "Ministry desk"
+
+corrections:
+  - date: 2026-07-30
+    text: "This evaluation originally scored timeliness **4** and stated that no dataset declared an update frequency. That was wrong. We checked only the portal's native `update_frequency` field and missed `dcat:accrualPeriodicity`, which is populated on all 702 datasets. Timeliness re-scored to **8** and the section rewritten around declared-versus-observed cadence. Thanks to the reader who pointed it out."
 
 scores:
   completeness: 7
-  timeliness: 4
+  timeliness: 8
   documentation: 5
   accessibility: 9
   licensing: 9
@@ -29,9 +33,10 @@ strengths:
   - "692 of 702 datasets carry a single unmodified CC BY 4.0 licence — 98.6% of the catalogue under one set of terms a reader can check in a minute."
   - "No registration, no click-through, no rate-limit theatre. A full CSV export of a 1.5-million-row dataset returned in a couple of seconds."
   - "Seven export formats including **Parquet** and GeoJSON, plus a DCAT/RDF export of the whole catalogue. Municipal portals almost never ship columnar formats."
+  - "Every dataset declares an intended update frequency against the EU frequency vocabulary, including 356 that honestly declare themselves one-off. Almost nobody does this."
 weaknesses:
-  - "**Not one of the 702 datasets states an update frequency.** The field exists in the platform and is empty across the entire catalogue."
-  - "31.8% of the catalogue has not been touched in over four years; the median dataset was last processed 468 days ago."
+  - "The declared cadence lives only in the machine-readable DCAT layer. The portal's own `update_frequency` field is empty on all 702 datasets, so a human reading a dataset page is told nothing."
+  - "Annual series are the weak spot: only 63.6% of datasets declaring ANNUAL are inside a generous 400-day window, and the 53 declaring IRREG make no testable promise at all."
   - "27.7% of fields carry a description, and 43% of datasets document no field at all. The English metadata is a fiction — 699 of 702 English titles are the Italian string copied over."
 
 bestfor:
@@ -39,7 +44,7 @@ bestfor:
   - "Geospatial work — 300 datasets carry geometry and export as GeoJSON or SHP"
   - "Anyone who needs a municipal licence that will survive a legal review"
 avoidfor:
-  - "Assuming a dataset's presence in the catalogue means anyone still maintains it"
+  - "Assuming a dataset is maintained without reading its declared cadence first"
   - "Administrative and governance series, where nearly two thirds are over two years stale"
   - "Non-Italian-speaking pipelines that trust the English metadata fields"
 ---
@@ -75,47 +80,56 @@ exports work, and the URLs are guessable. Seven formats ship, including Parquet 
 municipal portal in this catalogue offers — and the whole catalogue exports as DCAT/RDF. For a city
 of 400,000 people this is a serious piece of infrastructure.
 
-**And then there is the clock.** This is where the evaluation turns, and the numbers are not
-ambiguous:
+**And then there is the clock**, which is the part of this evaluation we got wrong first time and
+which turns out to be the most interesting thing on the portal.
 
-| Last processed | Datasets | Share |
-|---|---:|---:|
-| Under 1 month | 183 | 26.1% |
-| 1–6 months | 77 | 11.0% |
-| 6–12 months | 22 | 3.1% |
-| 1–2 years | 150 | 21.4% |
-| 2–4 years | 47 | 6.7% |
-| **Over 4 years** | **223** | **31.8%** |
+Every one of the 702 datasets declares an intended update frequency through
+`dcat:accrualPeriodicity`, using the European Union's controlled frequency vocabulary. Not a
+free-text note — a resolvable URI from a standard authority list. That is more than most national
+statistical portals manage, and it means the catalogue can be held to its own word:
 
-The median dataset was last processed 468 days ago. 38.5% of the catalogue is more than two years
-stale. Nearly a third has not moved in over four years.
+| Declared | Datasets | Median age | Inside its window |
+|---|---:|---:|---:|
+| DAILY | 16 | same day | 93.8% |
+| WEEKLY | 7 | 6 days | 100% |
+| MONTHLY | 127 | 14 days | 97.6% |
+| QUARTERLY | 11 | 7 days | 100% |
+| ANNUAL | 129 | 180 days | 63.6% |
+| IRREG | 53 | 447 days | not testable |
+| NEVER | 356 | 1,541 days | not applicable |
 
-That distribution is bimodal, and the split is the most interesting thing on this portal. Break the
-staleness down by theme and the pattern is unmistakable:
+Of the 290 datasets that make a testable promise, **239 — 82.4% — are keeping it.** The
+high-frequency feeds are close to perfect.
 
-| Theme | Stale over 2 years |
-|---|---:|
-| Governo e settore pubblico | 62.9% |
-| Regioni e città | 46.7% |
-| Istruzione, cultura e sport | 43.1% |
-| Economia e finanze | 36.4% |
-| Ambiente | 20.0% |
-| Popolazione e società | 13.8% |
-| Trasporti | 12.2% |
-| Scienza e tecnologia | 5.6% |
+The single most important number in that table is **356 declared NEVER**. Half the catalogue is
+explicitly flagged as one-off: a snapshot published once, never intended to be maintained. Those are
+the datasets sitting at four and six years old, and they are not rot. They are doing exactly what
+they said they would. A portal that admits half its holdings are frozen is being more honest than
+one that quietly implies everything is live.
 
-**The automated feeds are alive and the human-maintained ones are dead.** Transport sensors, wifi
-counters and air quality stations — the things that update because a machine pushes them — are
-almost all current. Governance and administrative publishing, the things that update because a
-person remembers to, has rotted at 62.9%. Nobody decided this. It is simply what happens when
-publication depends on individual diligence and no process enforces it.
+So the weakness is narrower than it looks, and it sits in two places. **Annual series are late**: only
+63.6% of the 129 datasets declaring ANNUAL fall inside a generous 400-day window, so roughly a third
+of Bologna's yearly statistical publishing has slipped its own deadline. And **53 datasets declare
+IRREG**, which is a promise that cannot be broken because it does not say anything; their median age
+is 447 days.
 
-**Not one dataset states an update frequency.** Zero out of 702. The platform has the field; the
-city has left it empty across the entire catalogue. This is the exact failure we set out in
-[Fresh Is a Claim, Not a Property](/analyses/fresh-is-a-claim-not-a-property/): every dataset shows
-a modification date, none states an intended cadence, and a reader has no way to distinguish a
-series that is published annually and is not due yet from one that was abandoned in 2021. Both look
-identical. Both are, as far as the metadata is concerned, fine.
+The real failure is one of audience. All of this lives in the machine-readable layer. The platform's
+own `update_frequency` field — the one a human reading a dataset page would see — is empty on all
+702. So a developer parsing DCAT knows precisely what to expect, and a journalist looking at the
+same dataset in a browser is told nothing at all. Bologna has answered the question we posed in
+[Fresh Is a Claim, Not a Property](/analyses/fresh-is-a-claim-not-a-property/), correctly and
+completely, and then filed the answer where most of its readers will never look.
+
+One small blemish for anyone harvesting: a dataset called `varco-n-65` carries the periodicity URI
+`http://publications.europa.eu/rosurce/authority/frequencY/MONTHLY` — "rosurce" for "resource", and a
+capital Y. A strict DCAT consumer will fail to resolve it. Four other datasets use `https` where the
+remaining 698 use `http`.
+
+The theme-by-theme staleness pattern still holds, and is worth stating because it explains *which*
+datasets get declared NEVER: transport, environment and technology — the machine-pushed feeds — are
+almost all current, while governance and administrative publishing carries the overwhelming majority
+of the frozen snapshots. Automation keeps promises; human publishing schedules mostly get downgraded
+to NEVER, honestly, and then stop.
 
 **Documentation is thin below the surface.** Dataset-level descriptions are mostly present and
 reasonable — only 14.2% run under 80 characters. Go one level down and it collapses: 3,489 of 12,591
@@ -148,11 +162,17 @@ level is real and substantial. The national profile is not filled in.
 
 ## The call
 
-**Grade B.** The parts Bologna decided once and automated — licensing, access, formats — are done
-better than most national portals manage, and the live sensor estate is genuinely impressive for a
-city this size. The parts that depend on somebody remembering have decayed exactly as far as you
-would predict, and the catalogue does not admit it anywhere a user would look.
+**Grade B+.** The things Bologna decided once and automated are done better than most national
+portals manage: one clean licence across 98.6% of the catalogue, no gate of any kind, seven export
+formats including Parquet, and — the part we initially missed and were wrong about — a complete,
+standards-based declaration of what every dataset intends to do. On that last point this is a model
+municipal portal, and we should have said so first time.
 
-The fix is not more data. It is one metadata field. Populate `update_frequency` on all 702 datasets
-and mark the dormant ones dormant, and this portal tells the truth about itself for the first time —
-and moves up a grade for the cost of an afternoon.
+What holds it back is not honesty but reach. The commitments are made to machines and withheld from
+people; a third of the annual series are late against their own declaration; and below the dataset
+description the documentation thins to almost nothing, with 43% of datasets explaining none of their
+own fields.
+
+The cheapest available upgrade has not changed, only its target. Mirror the DCAT periodicity into
+the field a human actually sees, and put a data dictionary on the sensor feeds. Neither is a
+publishing programme. Both are an afternoon.

@@ -9,13 +9,17 @@ licenses: ["CC BY 4.0"]
 source: "https://opendata.comune.bologna.it/explore/dataset/parcheggi_dati_trento_trieste/"
 temporal: "Rolling history to the current hour"
 updated: "Same day, every day"
-cadence: "Continuous — but not stated anywhere in the metadata"
+cadence: "Declares DAILY via dcat:accrualPeriodicity, and beats it"
 formats: ["CSV", "JSON", "GeoJSON", "Parquet", "XLSX", "SHP"]
 size: "1,544,113 records from 7 sensors"
 access: "Direct download and API, no registration"
 
 verdict: "The freshest dataset in the whole Bologna catalogue and the least explained — eight columns, not one of them documented."
 reviewer: "Ministry desk"
+
+corrections:
+  - date: 2026-07-30
+    text: "The spec sheet originally said the update cadence was not stated in the metadata. Wrong — this dataset declares DAILY via `dcat:accrualPeriodicity`, as do all 702 in the catalogue. We had checked only the portal's native field. The timeliness score of 10 is unchanged; it beats its own declaration."
 
 scores:
   completeness: 5
@@ -58,8 +62,8 @@ portal does well. The plumbing is excellent. Everything downstream of the plumbi
 
 **On timeliness it is a straight ten and we are happy to give it.** There is no publication lag
 worth measuring. The sensor reports, the record appears, anyone can have it. For a municipal feed
-that is genuinely good engineering, and the contrast with the 31.8% of Bologna's catalogue that has
-not moved in four years could not be sharper.
+that is genuinely good engineering. The dataset declares DAILY through `dcat:accrualPeriodicity` and
+comfortably beats its own promise.
 
 **On documentation it is close to the floor.** Eight fields. Zero descriptions. The dataset page
 carries a 931-character narrative description and not one line explaining what a column contains.
