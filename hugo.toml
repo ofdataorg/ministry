@@ -15,6 +15,7 @@ summaryLength = 30
   license = 'licenses'
 
 [params]
+  repo = 'https://github.com/ofdataorg/ministry'
   description = 'Independent evaluations and analyses of open datasets from all over the world.'
   strapline = 'Evaluations & analyses of open data, worldwide'
   established = 1998
@@ -50,6 +51,10 @@ summaryLength = 30
     name = 'Submit'
     pageRef = '/submit'
     weight = 50
+  [[menus.main]]
+    name = 'About'
+    pageRef = '/about'
+    weight = 60
 
 [markup]
   [markup.highlight]

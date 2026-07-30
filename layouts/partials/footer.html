@@ -35,7 +35,7 @@
   </div>
 
   <div class="wrap foot__legal">
-    <span>© {{ now.Year }} {{ site.Title }}. Text released under CC BY 4.0.</span>
+    <span>© {{ now.Year }} {{ site.Title }}. Text released under CC BY 4.0.{{ with site.Params.repo }} <a class="topline__link" href="{{ . }}" rel="noopener external">Source</a>.{{ end }}</span>
     <span class="foot__cat">CAT. NO. MOD-{{ site.Params.established }}-{{ printf "%03d" (len (where site.RegularPages "Type" "evaluations")) }}</span>
   </div>
 </footer>

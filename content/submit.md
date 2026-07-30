@@ -50,7 +50,8 @@ If we got a fact wrong, say so plainly and we will fix it and note the correctio
 
 ## Where to send it
 
-Submissions, corrections and complaints go to the desk. Open an issue on the repository, or send it
-however you found this site.
+Submissions, corrections and complaints go to the desk. Open an issue on
+[the repository](https://github.com/ofdataorg/ministry/issues), or send it however you found this
+site.
 
 > One line is enough to start: *what it is, where it lives, and what annoyed you about it.*
