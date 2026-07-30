@@ -12,8 +12,8 @@
     {{ with .Params.verdict }}<p class="pagehead__verdict">“{{ . }}”</p>{{ end }}
 
     <ul class="taglist">
-      {{ range .Params.domains }}<li><a class="tag" href="{{ (printf "/domains/%s" (. | urlize)) | relURL }}">{{ . }}</a></li>{{ end }}
-      {{ range .Params.licenses }}<li><a class="tag tag--ghost" href="{{ (printf "/licenses/%s" (. | urlize)) | relURL }}">{{ . }}</a></li>{{ end }}
+      {{ range .Params.domains }}<li><a class="tag" href="{{ (printf "domains/%s/" (. | urlize)) | relURL }}">{{ . }}</a></li>{{ end }}
+      {{ range .Params.licenses }}<li><a class="tag tag--ghost" href="{{ (printf "licenses/%s/" (. | urlize)) | relURL }}">{{ . }}</a></li>{{ end }}
     </ul>
   </div>
 </header>

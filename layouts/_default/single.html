@@ -2,7 +2,7 @@
 <header class="pagehead">
   <div class="wrap">
     <p class="pagehead__kicker">
-      {{ if .Section }}<a href="{{ (printf "/%s" .Section) | relURL }}">{{ .Section | humanize }}</a>{{ else }}{{ site.Title }}{{ end }}
+      {{ if .Section }}<a href="{{ (printf "%s/" .Section) | relURL }}">{{ .Section | humanize }}</a>{{ else }}{{ site.Title }}{{ end }}
       {{ if .Params.domains }}<span class="pagehead__sep">/</span>{{ delimit .Params.domains " · " }}{{ end }}
     </p>
     <h1 class="pagehead__title">{{ .Title }}</h1>

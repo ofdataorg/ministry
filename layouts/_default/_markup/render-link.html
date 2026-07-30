@@ -1,0 +1,8 @@
+{{- /* Rewrite root-relative links written in content so they survive a subpath
+       baseURL (e.g. /ministry/). relURL leaves a leading "/" untouched, so the
+       slash is trimmed first. External and anchor links pass through. */ -}}
+{{- $dest := .Destination -}}
+{{- if hasPrefix $dest "/" -}}
+  {{- $dest = relURL (strings.TrimPrefix "/" $dest) -}}
+{{- end -}}
+<a href="{{ $dest | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if hasPrefix .Destination "http" }} rel="noopener external"{{ end }}>{{ .Text | safeHTML }}</a>
