@@ -84,7 +84,8 @@
       {{ range where $nodes "level" $lvl.id }}
         {{ $term := site.GetPage (printf "/places/%s" .id) }}
         {{ with $term }}
-          {{ $rows = $rows | append (dict "page" . "pages" .Pages "own" (where .Pages "Params.place" .Title) "score" (partial "func/placescore.html" .Pages)) }}
+          {{ $ep := where .Pages "Type" "evaluations" }}
+          {{ $rows = $rows | append (dict "page" . "pages" $ep "own" (where $ep "Params.place" .Title) "score" (partial "func/placescore.html" $ep)) }}
         {{ end }}
       {{ end }}
       {{ if $rows }}

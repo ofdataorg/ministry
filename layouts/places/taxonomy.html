@@ -1,6 +1,8 @@
 {{ define "main" }}
 {{ $axes := site.Params.scorecard.axes }}
-{{ $roll := .Pages }}
+{{/* Only evaluations are scored. An analysis tagged with a place would
+     otherwise contribute a zero and silently drag the aggregate down. */}}
+{{ $roll := where .Pages "Type" "evaluations" }}
 {{ $nodes := site.Data.places.nodes }}
 
 {{/* locate this place in the tree */}}
@@ -42,7 +44,7 @@
   {{ $rows := slice }}
   {{ range where $nodes "level" $self.level }}
     {{ with site.GetPage (printf "/places/%s" .id) }}
-      {{ $rows = $rows | append (dict "title" .Title "score" (partial "func/placescore.html" .Pages)) }}
+      {{ $rows = $rows | append (dict "title" .Title "score" (partial "func/placescore.html" (where .Pages "Type" "evaluations"))) }}
     {{ end }}
   {{ end }}
   {{ $rows = sort $rows "score" "desc" }}

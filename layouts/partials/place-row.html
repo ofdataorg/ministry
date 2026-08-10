@@ -7,7 +7,7 @@
 
 {{- $term := site.GetPage (printf "/places/%s" $node.id) -}}
 {{- $roll := slice -}}
-{{- with $term }}{{ $roll = .Pages }}{{ end -}}
+{{- with $term }}{{ $roll = where .Pages "Type" "evaluations" }}{{ end -}}
 {{- $own := where $roll "Params.place" $node.title -}}
 {{- $score := partial "func/placescore.html" $roll -}}
 {{- $tier := "low" -}}
