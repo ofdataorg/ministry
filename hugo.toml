@@ -1,4 +1,4 @@
-baseURL = 'https://ofdataorg.github.io/ministry/'
+baseURL = 'https://ministry.ofdata.org/'
 languageCode = 'en-gb'
 title = 'Ministry of Data'
 enableRobotsTXT = true

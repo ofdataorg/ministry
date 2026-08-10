@@ -6,7 +6,7 @@ scored on six axes with the working published every time.
 Built with [Hugo](https://gohugo.io/) (extended, 0.128+). No external theme — the layouts, CSS and
 fonts all live in this repository, and the site makes no runtime requests to third parties.
 
-Live at <https://ofdataorg.github.io/ministry/>.
+Live at <https://ministry.ofdata.org/>.
 
 ## Running it locally
 
@@ -99,5 +99,6 @@ Text is CC BY 4.0. Fonts are under the SIL Open Font License.
 ## Deployment
 
 Pushes to `main` build and publish via `.github/workflows/hugo.yml` (GitHub Actions → Pages).
-`baseURL` is overridden at build time by the Pages configuration step, so the committed value in
-`hugo.toml` only affects local builds.
+`baseURL` is overridden at build time by `actions/configure-pages`, so the committed value in
+`hugo.toml` only affects local builds — the live value follows whatever the Pages custom domain is
+set to. The site is served from the custom domain `ministry.ofdata.org` at the site root.
