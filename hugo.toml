@@ -41,6 +41,10 @@ summaryLength = 30
     pageRef = '/analyses'
     weight = 20
   [[menus.main]]
+    name = 'Records'
+    pageRef = '/records'
+    weight = 22
+  [[menus.main]]
     name = 'Index'
     pageRef = '/places'
     weight = 25

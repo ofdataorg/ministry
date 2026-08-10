@@ -95,6 +95,32 @@ When a dataset is re-evaluated, the previous scoring stays on the page with its 
 and grade, so the movement is visible. Old grades are recomputed from their recorded axis scores by
 the same code that computes the current one — a past grade is never hand-written either.
 
+## Records are not evaluations
+
+Alongside evaluations the site publishes **[records](/records/)**: one page per dataset, produced by
+downloading it and writing down what happened. Whether it served data, how empty it came back, which
+columns were dead, whether it kept its own stated update cadence.
+
+Records carry **no grade**. A grade on this site means a person read the thing, formed a judgement,
+and wrote the prose that justifies the number. A record is a machine measurement, and awarding it a
+letter would borrow authority the process has not earned.
+
+What a record carries instead is a condition flag, applied by a published rule:
+
+- **Broken** — the download failed, or returned a file with no rows.
+- **Needs attention** — it served data, but at least one of: a wholly empty column, a broken cadence
+  promise, or duplicate rows in the sample.
+- **Serviceable** — none of the above applied on the day we measured.
+
+Licensing deliberately does not feed the flag. Where a portal states no licence on almost everything
+it publishes, flagging every one of its datasets would repeat a portal-level finding hundreds of
+times and tell a reader nothing about the dataset in front of them. That criticism belongs in the
+portal's evaluation, where it is argued once and scored.
+
+**Records are excluded from [The Index](/places/).** Place scores aggregate reviewed datasets only.
+Mixing machine measurement with editorial judgement would produce a number whose basis nobody could
+state, which is the thing this whole site exists to complain about.
+
 ## Grades
 
 The six scores are averaged and mapped to a letter. The letter is a summary, not the finding.

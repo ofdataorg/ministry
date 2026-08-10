@@ -1,0 +1,115 @@
+{{ define "main" }}
+{{ $recs := .RegularPagesRecursive }}
+{{ $broken := where $recs "Params.condition" "broken" }}
+{{ $att := where $recs "Params.condition" "attention" }}
+{{ $ok := where $recs "Params.condition" "serviceable" }}
+
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">Records · {{ len $recs }} datasets measured</p>
+    <h1 class="pagehead__title">{{ .Title }}</h1>
+    {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  <div class="legend">
+    <p class="legend__title">The condition flag is applied by rule</p>
+    <ul class="legend__rules">
+      <li><span class="flagx flagx--bad">broken</span> the download failed, or returned a file with no rows.</li>
+      <li><span class="flagx flagx--warn">attention</span> it served data, but at least one of: a wholly empty column, a broken cadence promise, or no licence stated.</li>
+      <li><span class="flagx">serviceable</span> none of the above applied when we measured it.</li>
+    </ul>
+    <p class="legend__note">
+      These are measurements, not <a href="{{ "evaluations" | relURL }}">evaluations</a>. No six-axis
+      grade is given because nobody has read them and formed a judgement — a machine downloaded each
+      one and wrote down what happened. They are deliberately excluded from
+      <a href="{{ "places" | relURL }}">The Index</a>, which scores only reviewed datasets.
+    </p>
+  </div>
+
+  <dl class="stats">
+    <div class="stats__item"><dt>Measured</dt><dd>{{ len $recs }}</dd></div>
+    <div class="stats__item"><dt>Serviceable</dt><dd>{{ len $ok }}</dd></div>
+    <div class="stats__item"><dt>Needs attention</dt><dd>{{ len $att }}</dd></div>
+    <div class="stats__item"><dt>Broken</dt><dd>{{ len $broken }}</dd></div>
+  </dl>
+
+  <div class="filters" data-filters>
+    <div class="filters__row">
+      <span class="filters__label">Sort</span>
+      <div class="segmented" role="group" aria-label="Sort records">
+        <button type="button" class="seg is-on" data-sort="title">A–Z</button>
+        <button type="button" class="seg" data-sort="score">Most defects</button>
+        <button type="button" class="seg" data-sort="date">Freshest</button>
+      </div>
+    </div>
+    <div class="filters__row">
+      <span class="filters__label">Portal</span>
+      <div class="filters__chips">
+        <button type="button" class="chip chip--btn is-on" data-facet="regions" data-value="">All</button>
+        {{ range (slice "NYC Open Data" "Open Data Regione Lombardia") }}
+          <button type="button" class="chip chip--btn" data-facet="regions" data-value="{{ . | urlize }}">{{ . }}</button>
+        {{ end }}
+      </div>
+    </div>
+    <div class="filters__row">
+      <span class="filters__label">Condition</span>
+      <div class="filters__chips">
+        <button type="button" class="chip chip--btn is-on" data-facet="domains" data-value="">All</button>
+        {{ range (slice "serviceable" "attention" "broken") }}
+          <button type="button" class="chip chip--btn" data-facet="domains" data-value="{{ . }}">{{ . | humanize }}</button>
+        {{ end }}
+      </div>
+    </div>
+    <p class="filters__count" data-count aria-live="polite">{{ len $recs }} records</p>
+  </div>
+
+  <ol class="tracks" data-tracklist>
+    {{ range $i, $p := $recs }}
+      {{ $m := $p.Params.measured }}
+      {{ $defects := add (add ($m.cols_empty | default 0) ($m.cols_mistyped | default 0)) (cond (eq $p.Params.cadence_kept "no") 5 0) }}
+      <li class="track"
+          data-score="{{ $defects }}"
+          data-date="{{ $p.Params.last_update | default $p.Params.snapshot | time.Format "20060102" }}"
+          data-title="{{ lower $p.Title }}"
+          data-regions="{{ $p.Params.portal | urlize }}"
+          data-domains="{{ $p.Params.condition }}">
+        <a class="track__hit track__hit--rec" href="{{ $p.RelPermalink }}">
+          <span class="track__no">{{ printf "%02d" (add $i 1) }}</span>
+          <span class="track__body">
+            <span class="track__title">{{ $p.Title }}</span>
+            <span class="track__sub">
+              <span class="track__pub">{{ $p.Params.portal }}</span>
+              {{ with $p.Params.category }}<span class="track__dot">·</span><span>{{ . }}</span>{{ end }}
+              <span class="track__dot">·</span><span>{{ $m.columns }} cols</span>
+              <span class="track__dot">·</span><span>{{ $p.Params.age_days }}d old</span>
+            </span>
+            <span class="track__verdict">
+              {{- if eq $p.Params.condition "broken" }}Served no data when measured.
+              {{- else }}
+                {{ if gt ($m.cols_empty | default 0) 0 }}{{ $m.cols_empty }} empty column{{ if ne $m.cols_empty 1 }}s{{ end }}. {{ end }}
+                {{ if gt ($m.cols_mistyped | default 0) 0 }}{{ $m.cols_mistyped }} numeric column{{ if ne $m.cols_mistyped 1 }}s{{ end }} typed as text. {{ end }}
+                {{ if eq $p.Params.cadence_kept "no" }}Declared {{ lower $p.Params.declared_cadence }}, {{ $p.Params.age_days }} days old. {{ end }}
+                {{ if not $p.Params.license }}No licence stated.{{ end }}
+              {{- end -}}
+            </span>
+          </span>
+          <span class="badge badge--{{ if eq $p.Params.condition "broken" }}low{{ else if eq $p.Params.condition "attention" }}mid{{ else }}high{{ end }}">
+            <span class="badge__grade">{{ if eq $p.Params.condition "broken" }}✕{{ else if eq $p.Params.condition "attention" }}!{{ else }}✓{{ end }}</span>
+          </span>
+        </a>
+      </li>
+    {{ end }}
+  </ol>
+
+  <p class="tracks__empty" data-empty hidden>No records match that combination.</p>
+
+  <p class="index__caveat">
+    A random sample, drawn with a fixed seed from each portal's official datasets and measured on one
+    day. A dataset flagged <span class="flagx flagx--warn">attention</span> is not necessarily bad —
+    an empty column may be a field that is genuinely null for every current record. The flag says
+    where to look, not what to conclude.
+  </p>
+</div>
+{{ end }}

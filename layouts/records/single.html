@@ -1,0 +1,118 @@
+{{ define "main" }}
+{{ $m := .Params.measured }}
+{{ $cond := .Params.condition }}
+
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">
+      <a href="{{ "records" | relURL }}">Records</a>
+      <span class="pagehead__sep">/</span>
+      <a href="{{ .Params.portal_ref | relURL }}">{{ .Params.portal }}</a>
+      {{ with .Params.category }}<span class="pagehead__sep">/</span>{{ . }}{{ end }}
+    </p>
+    <h1 class="pagehead__title">{{ .Title }}</h1>
+    <p class="pagehead__meta">
+      {{ .Params.place }} · dataset <code>{{ .Params.dataset_id }}</code>
+    </p>
+
+    <p class="rec__condition rec__condition--{{ $cond }}">
+      {{ if eq $cond "broken" }}Did not serve data when measured
+      {{ else if eq $cond "attention" }}Serves data, with defects recorded below
+      {{ else }}Served data cleanly when measured{{ end }}
+    </p>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <article class="layout__main">
+    <section class="prov" aria-label="Basis of this record">
+      <h2 class="prov__label">Measured, not reviewed</h2>
+      <p class="prov__note prov__note--quiet">
+        This is a measurement sheet, not an <a href="{{ "evaluations" | relURL }}">evaluation</a>. It
+        records what happened when we downloaded the dataset on
+        <time datetime="{{ time.Format "2006-01-02" .Params.snapshot }}">{{ time.Format "2 January 2006" .Params.snapshot }}</time>
+        — no six-axis grade, because nobody has read it and formed a judgement. The condition flag is
+        applied by rule, and the rules are stated on the <a href="{{ "records" | relURL }}">index</a>.
+        The portal it came from <em>has</em> been evaluated:
+        <a href="{{ .Params.portal_ref | relURL }}">{{ .Params.portal }}</a>.
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="meas-h">
+      <div class="card__head"><h2 class="card__title" id="meas-h">What the download did</h2>
+        <span class="card__meta">200-row sample</span></div>
+      <dl class="spec__list">
+        <div><dt>HTTP</dt><dd>{{ $m.http }}{{ if eq $m.http 200 }} OK{{ end }}</dd></div>
+        <div><dt>Response</dt><dd>{{ $m.secs }} s</dd></div>
+        <div><dt>Rows returned</dt><dd>{{ $m.rows }}</dd></div>
+        <div><dt>Columns</dt><dd>{{ $m.columns }}</dd></div>
+        {{ if gt $m.columns 0 }}
+          <div><dt>Cells empty</dt><dd>{{ lang.FormatPercent 1 (mul $m.null_mean 100) }}</dd></div>
+          <div><dt>Wholly empty columns</dt><dd>{{ $m.cols_empty }}{{ if gt $m.cols_empty 0 }} of {{ $m.columns }}{{ end }}</dd></div>
+          <div><dt>Text columns holding only numbers</dt><dd>{{ $m.cols_mistyped }}</dd></div>
+          <div><dt>Documented columns</dt><dd>{{ $m.cols_documented }} of {{ $m.columns }}</dd></div>
+          <div><dt>Duplicate rows in sample</dt><dd>{{ $m.dup_rows }}</dd></div>
+        {{ end }}
+      </dl>
+    </section>
+
+    {{ with .Params.columns }}
+      <section class="card" aria-labelledby="cols-h">
+        <div class="card__head"><h2 class="card__title" id="cols-h">Columns</h2>
+          <span class="card__meta">{{ len . }} in the served file</span></div>
+        <div class="table-scroll">
+          <table class="index reccols">
+            <thead>
+              <tr>
+                <th scope="col">Field</th>
+                <th scope="col">Declared type</th>
+                <th class="index__n" scope="col">Empty</th>
+                <th class="index__n" scope="col">Distinct</th>
+                <th scope="col">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{ range . }}
+                <tr{{ if eq .empty 1.0 }} class="reccols__dead"{{ end }}>
+                  <th class="reccols__f" scope="row"><code>{{ .f }}</code></th>
+                  <td class="reccols__t">{{ with .type }}{{ . }}{{ else }}—{{ end }}</td>
+                  <td class="index__n">{{ lang.FormatPercent 0 (mul .empty 100) }}</td>
+                  <td class="index__n">{{ .uniq }}</td>
+                  <td class="reccols__n">
+                    {{- if eq .empty 1.0 }}<span class="flagx flagx--bad">no data</span>{{ end -}}
+                    {{- if .mistyped }}<span class="flagx flagx--warn">numbers as text</span>{{ end -}}
+                    {{- if and (eq .uniq 1) (lt .empty 1.0) }}<span class="flagx">one value</span>{{ end -}}
+                    {{- if not .doc }}<span class="flagx flagx--quiet">undocumented</span>{{ end -}}
+                  </td>
+                </tr>
+              {{ end }}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    {{ end }}
+
+    {{ with .Params.source }}
+      <p class="sourcelink"><a class="btn btn--hot" href="{{ . }}" rel="noopener external">Go to the dataset ↗</a></p>
+    {{ end }}
+  </article>
+
+  <aside class="layout__side">
+    <div class="card spec">
+      <div class="card__head"><h2 class="card__title">As published</h2></div>
+      <dl class="spec__list">
+        <div><dt>Portal</dt><dd><a href="{{ .Params.portal_ref | relURL }}">{{ .Params.portal }}</a></dd></div>
+        {{ with .Params.category }}<div><dt>Category</dt><dd>{{ . }}</dd></div>{{ end }}
+        <div><dt>Licence</dt><dd>{{ with .Params.license }}{{ . }}{{ else }}<em>None stated</em>{{ end }}</dd></div>
+        <div><dt>Declared cadence</dt><dd>{{ with .Params.declared_cadence }}{{ . }}{{ else }}<em>Not stated</em>{{ end }}</dd></div>
+        {{ with .Params.last_update }}<div><dt>Data last updated</dt><dd>{{ time.Format "2 Jan 2006" . }}</dd></div>{{ end }}
+        <div><dt>Age at measurement</dt><dd>{{ .Params.age_days }} days</dd></div>
+        <div><dt>Cadence kept</dt>
+          <dd>{{ if eq .Params.cadence_kept "yes" }}Yes{{ else if eq .Params.cadence_kept "no" }}<strong>No</strong>{{ else }}Not testable{{ end }}</dd></div>
+      </dl>
+    </div>
+
+    <p class="side__stamp">Measured {{ time.Format "02 Jan 2006" .Params.snapshot }}<br>by machine, not by hand</p>
+  </aside>
+</div>
+{{ end }}

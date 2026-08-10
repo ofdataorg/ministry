@@ -1235,3 +1235,39 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
   text-transform: uppercase; color: var(--muted); margin-bottom: .15rem;
 }
 .basis a { color: var(--seal); }
+
+/* ============================================================
+   RECORDS — measurement sheets, not evaluations
+   ============================================================ */
+.rec__condition {
+  display: inline-block; margin: var(--space-md) 0 0;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 1px solid var(--rule);
+  font-family: var(--ui); font-weight: 600; font-size: var(--text-sm);
+}
+.rec__condition--serviceable { border-color: var(--pass); color: var(--pass); }
+.rec__condition--attention { border-color: var(--ink); color: var(--ink-2); }
+.rec__condition--broken { border-color: var(--seal); color: var(--seal); }
+
+.legend__rules { list-style: none; display: grid; gap: var(--space-2xs); margin-bottom: var(--space-sm); }
+.legend__rules li { font-family: var(--ui); font-size: var(--text-sm); color: var(--ink-2); line-height: 1.55; }
+
+.flagx {
+  display: inline-block; margin-right: var(--space-3xs);
+  font-family: var(--ui); font-weight: 700; font-size: .55rem; letter-spacing: .09em;
+  text-transform: uppercase; padding: .18em .4em;
+  border: 1px solid var(--rule); color: var(--muted); background: var(--paper);
+  vertical-align: middle; white-space: nowrap;
+}
+.flagx--bad { border-color: var(--seal); color: var(--seal); }
+.flagx--warn { border-color: var(--ink-2); color: var(--ink-2); }
+.flagx--quiet { border-color: var(--rule-soft); color: var(--muted); }
+
+.reccols { font-size: var(--text-xs); }
+.reccols__f code { font-family: var(--mono); font-size: .72rem; background: none; padding: 0; }
+.reccols__t { font-family: var(--ui); font-size: .7rem; color: var(--muted); white-space: nowrap; }
+.reccols__n { min-width: 12rem; }
+.reccols__dead { background: var(--paper-2); }
+.reccols__dead .reccols__f code { color: var(--muted); text-decoration: line-through; }
+
+.track__hit--rec { grid-template-columns: 3rem 1fr auto; }

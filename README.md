@@ -66,6 +66,17 @@ To add a jurisdiction, add a node to `data/places.yaml` and use its `title` in a
 Ranking happens only within a level, never across one. A place with no datasets of its own is
 flagged `derived`; a place resting on fewer than three is flagged `thin`.
 
+## Records
+
+`content/records/` holds machine-measured dataset pages — one per dataset, generated from an actual
+download rather than written. They carry no `scores`, only a `measured` block and a rule-based
+`condition`, and they are **deliberately kept out of every taxonomy** so they cannot leak into The
+Index or the region and domain pages. `/method/` states the rules for readers.
+
+The generator lives outside the repo: it merges a Socrata Discovery API pull with per-dataset
+download profiles and emits front matter. To extend the set, profile more datasets and regenerate —
+the front-matter shape is the contract, and `layouts/records/` renders whatever it is given.
+
 ## Adding an analysis
 
 ```bash
