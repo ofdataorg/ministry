@@ -9,6 +9,7 @@ domains: ["Mobility", "Geospatial"]
 licenses: ["ODbL 1.0"]
 
 source: "https://planet.openstreetmap.org/"
+version: "Rolling planet file — versioned by replication sequence number"
 temporal: "2004 to this minute"
 updated: "Minutely diffs, weekly full planet"
 cadence: "Continuous"

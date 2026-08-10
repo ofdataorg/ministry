@@ -9,6 +9,8 @@ domains: ["Environment", "Health"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/centraline-qualita-aria/"
+version: "Rolling daily feed — 45,302 measurements at snapshot"
+snapshot: 2026-07-30
 temporal: "Rolling daily measurements; a separate historic series runs from 2000"
 updated: "Same day"
 cadence: "Declares DAILY, and meets it"

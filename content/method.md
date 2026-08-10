@@ -70,6 +70,31 @@ statistics are.
 
 Bespoke binary formats requiring community-maintained readers are the floor.
 
+## Every score has a version and a date
+
+An evaluation is not a verdict on a dataset. It is a verdict on **one version of that dataset,
+examined on one day.** Publishers fix things. Series lapse. Licences get clarified. A score with no
+stated basis is an opinion wearing a number, so every evaluation records two facts at the top:
+
+- **Version** — what was assessed. A release number where the publisher issues one, a descriptor
+  where they do not. Where a publisher does not version their data at all, the page says so, and
+  that absence is itself a finding we score under interoperability.
+- **Snapshot** — the date we pulled the data. Not the publication date of the review, and not the
+  dataset's own last-updated field. The day we had the bytes.
+
+Evaluations with a snapshot over a year old are flagged on the page as due for re-evaluation. We
+would rather say "this is old" than let a stale score pass as current — it is the same failure we
+score publishers down for in [Fresh Is a Claim, Not a Property](/analyses/fresh-is-a-claim-not-a-property/).
+
+**Some evaluations carry no snapshot at all.** Those were written from the publisher's
+documentation and prior working experience rather than from a dated download. They say so plainly
+on the page. The scores stand as editorial judgement, but they are provisional until someone pulls
+the data and verifies them, and they should not be quoted as measurement.
+
+When a dataset is re-evaluated, the previous scoring stays on the page with its own version, date
+and grade, so the movement is visible. Old grades are recomputed from their recorded axis scores by
+the same code that computes the current one — a past grade is never hand-written either.
+
 ## Grades
 
 The six scores are averaged and mapped to a letter. The letter is a summary, not the finding.

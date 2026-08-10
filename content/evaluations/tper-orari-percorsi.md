@@ -9,6 +9,8 @@ domains: ["Mobility"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/tper-vigente/"
+version: "Mese vigente feed, processed 10 July 2026"
+snapshot: 2026-07-30
 temporal: "Current month only"
 updated: "July 2026"
 cadence: "Declares MONTHLY, and meets it"

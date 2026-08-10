@@ -1,0 +1,102 @@
+{{- /* What was evaluated, and when. A score describes one version of a
+       dataset at one moment; without both, it is an opinion with a date
+       on it. Where no snapshot exists we say so rather than implying a
+       pull that never happened. */ -}}
+{{- $p := . -}}
+{{- $snap := $p.Params.snapshot -}}
+{{- $ver := $p.Params.version -}}
+
+{{- $days := 0 -}}
+{{- $age := "" -}}
+{{- if $snap -}}
+  {{- $t := time.AsTime $snap -}}
+  {{- $days = int (div (now.Sub $t).Hours 24) -}}
+  {{- if lt $days 1 }}{{ $age = "today" }}
+  {{- else if eq $days 1 }}{{ $age = "yesterday" }}
+  {{- else if lt $days 31 }}{{ $age = printf "%d days ago" $days }}
+  {{- else if lt $days 365 }}{{ $age = printf "%d months ago" (int (div $days 30)) }}
+  {{- else }}{{ $age = printf "%.1f years ago" (div (float $days) 365.0) }}{{ end -}}
+{{- end -}}
+
+<section class="prov{{ if not $snap }} prov--undated{{ else if ge $days 365 }} prov--stale{{ end }}"
+         aria-label="What this evaluation covers">
+  <h2 class="prov__label">As evaluated</h2>
+  <dl class="prov__list">
+    <div>
+      <dt>Version</dt>
+      <dd>{{ with $ver }}{{ . }}{{ else }}<span class="prov__gap">Not recorded by the publisher</span>{{ end }}</dd>
+    </div>
+    <div>
+      <dt>Snapshot</dt>
+      <dd>
+        {{- if $snap }}<time datetime="{{ time.Format "2006-01-02" $snap }}">{{ time.Format "2 January 2006" $snap }}</time>
+          <span class="prov__age">{{ $age }}</span>
+        {{- else }}<span class="prov__gap">None on file</span>{{ end -}}
+      </dd>
+    </div>
+    <div>
+      <dt>Scored</dt>
+      <dd><time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2 January 2006" }}</time>{{ with $p.Params.reviewer }} · {{ . }}{{ end }}</dd>
+    </div>
+  </dl>
+
+  {{ if not $snap }}
+    <p class="prov__note">
+      This evaluation was written from the publisher's documentation and prior working
+      experience, not from a dated download. The scores stand as editorial judgement but have
+      not been verified against a fresh pull — treat them as provisional until re-evaluated.
+    </p>
+  {{ else if ge $days 365 }}
+    <p class="prov__note">
+      This snapshot is over a year old. The dataset may have changed in ways that would move
+      the score, and by our own <a href="{{ "method" | relURL }}">rubric</a> that is exactly the
+      kind of drift a reader should not have to guess at. Due for re-evaluation.
+    </p>
+  {{ else }}
+    <p class="prov__note prov__note--quiet">
+      Scores describe this version at this moment. A publisher who fixes something after the
+      snapshot has not been credited for it yet — <a href="{{ "submit" | relURL }}">tell us</a>
+      and we will re-evaluate.
+    </p>
+  {{ end }}
+</section>
+
+{{- with $p.Params.history }}
+  {{- $rows := slice -}}
+  {{- range . -}}
+    {{- $s := partial "func/scoremap.html" .scores -}}
+    {{- $rows = $rows | append (dict "date" .date "version" .version "note" .note "score" $s "grade" (partial "func/grade.html" $s)) -}}
+  {{- end }}
+  {{- $cur := partial "func/score.html" $p -}}
+  <section class="card history" aria-label="Score history">
+    <div class="card__head"><h2 class="card__title">Score history</h2><span class="card__meta">{{ add (len $rows) 1 }} scorings</span></div>
+    <table class="history__table">
+      <thead>
+        <tr><th scope="col">Scored</th><th scope="col">Version</th><th scope="col">Grade</th><th scope="col">Change</th></tr>
+      </thead>
+      <tbody>
+        {{ range $i, $r := $rows }}
+          <tr>
+            <td><time datetime="{{ time.Format "2006-01-02" $r.date }}">{{ time.Format "2 Jan 2006" $r.date }}</time></td>
+            <td class="history__ver">{{ with $r.version }}{{ . }}{{ else }}—{{ end }}</td>
+            <td class="history__grade">{{ $r.grade }} <span class="history__num">{{ lang.FormatNumber 1 $r.score }}</span></td>
+            <td class="history__delta">—</td>
+          </tr>
+        {{ end }}
+        {{ $prev := (index $rows (sub (len $rows) 1)).score }}
+        {{ $delta := sub $cur $prev }}
+        <tr class="history__now">
+          <td><time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2 Jan 2006" }}</time></td>
+          <td class="history__ver">{{ with $ver }}{{ . }}{{ else }}—{{ end }}</td>
+          <td class="history__grade">{{ partial "func/grade.html" $cur }} <span class="history__num">{{ lang.FormatNumber 1 $cur }}</span></td>
+          <td class="history__delta {{ if gt $delta 0.04 }}is-up{{ else if lt $delta -0.04 }}is-down{{ else }}is-flat{{ end }}">
+            {{- if gt $delta 0.04 }}▲ +{{ lang.FormatNumber 1 $delta }}
+            {{- else if lt $delta -0.04 }}▼ {{ lang.FormatNumber 1 $delta }}
+            {{- else }}no change{{ end -}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {{ range $rows }}{{ with .note }}<p class="history__note">{{ . | markdownify }}</p>{{ end }}{{ end }}
+  </section>
+{{- end -}}

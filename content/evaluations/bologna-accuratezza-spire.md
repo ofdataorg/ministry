@@ -9,6 +9,8 @@ domains: ["Mobility", "Governance"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/accuratezza-spire-anno-2025/"
+version: "2025 edition, processed 12 January 2026"
+snapshot: 2026-07-30
 temporal: "One dataset per year, 2022 onward"
 updated: "January 2026 for the 2025 edition"
 cadence: "Declares NEVER — each year is a closed snapshot"

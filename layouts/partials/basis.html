@@ -1,0 +1,24 @@
+{{- /* How much of an aggregate rests on dated measurement. An index score
+       is a snapshot of snapshots; this says how many of them exist. */ -}}
+{{- $pages := .pages -}}
+{{- $dated := where $pages "Params.snapshot" "!=" nil -}}
+{{- $n := len $pages -}}
+{{- $d := len $dated -}}
+{{- $gap := sub $n $d -}}
+{{- $oldest := "" -}}
+{{- with $dated }}{{ $oldest = (index (sort . "Params.snapshot" "asc") 0).Params.snapshot }}{{ end -}}
+<p class="basis">
+  <span class="basis__label">Basis</span>
+  {{ if eq $d 0 -}}
+    No evaluation here rests on a dated snapshot: {{ if eq $n 1 }}it was{{ else }}all {{ $n }} were{{ end }}
+    written from documentation rather than a verified pull, so this figure is editorial judgement
+    rather than measurement.
+  {{- else -}}
+    {{ $d }} of {{ $n }} evaluation{{ if ne $n 1 }}s{{ end }} rest{{ if eq $d 1 }}s{{ end }} on a dated
+    snapshot{{ with $oldest }}, the oldest taken {{ time.Format "2 January 2006" . }}{{ end }}.
+    {{ if gt $gap 0 }}The {{ if eq $gap 1 }}other one was{{ else }}other {{ $gap }} were{{ end }}
+    written from documentation rather than a verified pull, so this figure is part measurement and
+    part judgement.{{ end }}
+  {{- end }}
+  See <a href="{{ "method" | relURL }}">how we score</a>.
+</p>

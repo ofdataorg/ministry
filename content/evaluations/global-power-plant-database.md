@@ -9,6 +9,7 @@ domains: ["Energy", "Climate"]
 licenses: ["CC BY 4.0"]
 
 source: "https://datasets.wri.org/datasets/global-power-plant-database"
+version: "v1.3.0 (June 2021)"
 temporal: "Commissioning years from the 1890s to 2021"
 updated: "v1.3.0, June 2021"
 cadence: "Dormant — no release since 2021"

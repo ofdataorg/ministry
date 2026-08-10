@@ -9,6 +9,8 @@ domains: ["Mobility"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/parcheggi_dati_trento_trieste/"
+version: "Rolling feed — 1,544,113 records at snapshot"
+snapshot: 2026-07-29
 temporal: "Rolling history to the current hour"
 updated: "Same day, every day"
 cadence: "Declares DAILY via dcat:accrualPeriodicity, and beats it"

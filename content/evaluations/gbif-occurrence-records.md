@@ -9,6 +9,7 @@ domains: ["Biodiversity", "Science"]
 licenses: ["CC0 / CC BY / CC BY-NC (mixed)"]
 
 source: "https://www.gbif.org/occurrence/search"
+version: "Rolling index — every download is versioned by its own DOI"
 temporal: "18th century specimens to yesterday's bird sighting"
 updated: "Continuously"
 cadence: "Rolling — publishers push, index refreshes daily"

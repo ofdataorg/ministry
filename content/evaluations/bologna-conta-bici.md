@@ -9,6 +9,8 @@ domains: ["Mobility"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/colonnine-conta-bici/"
+version: "Rolling feed — 519,392 hourly observations at snapshot"
+snapshot: 2026-07-30
 temporal: "Hourly counts, multi-year rolling history"
 updated: "Same day"
 cadence: "Declares MONTHLY, delivers daily"

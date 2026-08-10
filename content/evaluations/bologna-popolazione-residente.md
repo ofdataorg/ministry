@@ -9,6 +9,8 @@ domains: ["Population", "Society"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/popolazione-residente-per-stato-civile-eta-sessocittadinanza-quartiere-e-zona-se/"
+version: "Series to 2024, processed 26 May 2025"
+snapshot: 2026-07-30
 temporal: "Annual series from 1986"
 updated: "May 2025"
 cadence: "Declares ANNUAL — 429 days since last processing, so currently late"

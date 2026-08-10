@@ -9,6 +9,7 @@ domains: ["Population", "Housing"]
 licenses: ["CC BY 4.0"]
 
 source: "https://www.abs.gov.au/census/find-census-data/datapacks"
+version: "2021 Census DataPacks"
 temporal: "Census years, five-yearly"
 updated: "Following each census"
 cadence: "Every five years"

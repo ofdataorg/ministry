@@ -27,14 +27,26 @@ matter:
 | Field | Purpose |
 |---|---|
 | `publishers`, `regions`, `domains`, `licenses` | Taxonomies — these drive the filters and index pages |
+| `version` | What was evaluated — a release number, or a descriptor if the publisher does not version |
+| `snapshot` | The date the data was actually pulled. Omit it rather than inventing one |
+| `history` | Prior scorings, each with its own date, version and axis scores |
 | `scores` | Six axes, 0–10 each. The overall grade is computed, never hand-written |
 | `verdict` | One quotable sentence; shows in the tracklist and on the scorecard seal |
 | `strengths` / `weaknesses` | Rendered as the "Holds up" / "Falls down" panels |
 | `bestfor` / `avoidfor` | Sidebar guidance lists |
 | `source`, `temporal`, `updated`, `cadence`, `formats`, `size`, `access` | The spec sheet |
 
-Scores are averaged with equal weight in `layouts/partials/func/score.html` and mapped to a letter
-in `layouts/partials/func/grade.html`. Change the bands in one place and the whole site follows.
+Scores are averaged with equal weight in `layouts/partials/func/scoremap.html` and mapped to a
+letter in `layouts/partials/func/grade.html`. Change the bands in one place and the whole site
+follows — including historical grades, which are recomputed from their recorded axis scores rather
+than stored.
+
+**Version and snapshot are the point.** An evaluation judges one version of a dataset on one day,
+so `layouts/partials/provenance.html` renders both at the top of every review. A snapshot over a
+year old flags the page as due for re-evaluation. An evaluation with *no* snapshot says plainly
+that it was written from documentation rather than a verified pull — omitting the field is the
+honest option, never a date you did not earn. Aggregate pages carry a `basis` line saying how many
+of their evaluations rest on dated measurement.
 
 The scoring rubric itself is documented for readers at `/method/`.
 

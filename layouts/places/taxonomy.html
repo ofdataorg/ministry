@@ -168,6 +168,8 @@
     </table>
   </div>
 
+  {{ partial "basis.html" (dict "pages" $roll) }}
+
   <p class="index__caveat">
     Rows in grey are published by a jurisdiction nested inside {{ .Title }} and counted in its score.
     Cells are raw axis scores, unweighted — read the review before quoting a number.

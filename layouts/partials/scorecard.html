@@ -34,7 +34,9 @@
     </div>
   </div>
 
-  {{ with $p.Params.reviewed }}
-    <p class="scorecard__foot">Reviewed {{ dateFormat "2 January 2006" $p.Date }}{{ with $p.Params.reviewer }} by {{ . }}{{ end }} · Snapshot taken {{ . }}</p>
-  {{ end }}
+  <p class="scorecard__foot">
+    {{ with $p.Params.snapshot }}Measured against the data as at {{ time.Format "2 January 2006" . }}
+    {{- else }}Not verified against a dated download{{ end }} ·
+    Scored {{ $p.Date.Format "2 January 2006" }}{{ with $p.Params.reviewer }} by {{ . }}{{ end }}
+  </p>
 </section>

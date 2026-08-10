@@ -110,6 +110,8 @@
     {{ end }}
   </div>
 
+  {{ partial "basis.html" (dict "pages" $all) }}
+
   <p class="index__caveat">
     A place's score is the plain mean of its datasets' six-axis means — no weighting, same as
     <a href="{{ "method" | relURL }}">the rubric</a> — computed over everything nested beneath it. It

@@ -9,6 +9,8 @@ domains: ["Governance", "Society"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/segnalazioni-open-citizen-relationship-management-czrm/"
+version: "Rolling — 123,823 reports at snapshot"
+snapshot: 2026-07-30
 temporal: "Rolling history of citizen reports"
 updated: "July 2026"
 cadence: "Declares MONTHLY, and meets it"

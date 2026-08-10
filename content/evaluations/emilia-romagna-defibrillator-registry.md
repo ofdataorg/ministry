@@ -9,6 +9,8 @@ domains: ["Health", "Geospatial"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/progetto-dae/"
+version: "Register as at snapshot — 6,197 devices"
+snapshot: 2026-07-30
 temporal: "Current register, no history"
 updated: "Same day"
 cadence: "Declares WEEKLY, and beats it"

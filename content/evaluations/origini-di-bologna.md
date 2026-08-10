@@ -9,6 +9,8 @@ domains: ["Society", "Geospatial"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/explore/dataset/origini-di-bologna/"
+version: "Completed survey, processed 16 July 2020"
+snapshot: 2026-07-30
 temporal: "A survey of the medieval and early-modern city"
 updated: "July 2020"
 cadence: "Declares NEVER — a completed survey, not a maintained series"

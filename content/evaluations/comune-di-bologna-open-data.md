@@ -9,6 +9,8 @@ domains: ["Governance", "Geospatial", "Mobility"]
 licenses: ["CC BY 4.0"]
 
 source: "https://opendata.comune.bologna.it/"
+version: "Catalogue as at 30 July 2026 — 702 datasets, 43,031,850 records"
+snapshot: 2026-07-30
 temporal: "Varies by dataset; several statistical series run back decades"
 updated: "Continuously for the automated feeds; half the catalogue is declared one-off"
 cadence: "Declared on all 702 via dcat:accrualPeriodicity; 82.4% of testable promises honoured"

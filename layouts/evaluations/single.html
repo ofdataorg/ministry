@@ -34,6 +34,8 @@
       </aside>
     {{ end }}
 
+    {{ partial "provenance.html" . }}
+
     {{ partial "scorecard.html" . }}
 
     <div class="prose">
@@ -67,6 +69,8 @@
       <div class="card__head"><h2 class="card__title">Spec sheet</h2></div>
       <dl class="spec__list">
         {{ with .Params.publishers }}<div><dt>Publisher</dt><dd>{{ delimit . ", " }}</dd></div>{{ end }}
+        {{ with .Params.version }}<div><dt>Version</dt><dd>{{ . }}</dd></div>{{ end }}
+        {{ with .Params.snapshot }}<div><dt>Snapshot</dt><dd>{{ time.Format "2 Jan 2006" . }}</dd></div>{{ end }}
         {{ with .Params.regions }}<div><dt>Coverage</dt><dd>{{ delimit . ", " }}</dd></div>{{ end }}
         {{ with .Params.temporal }}<div><dt>Time span</dt><dd>{{ . }}</dd></div>{{ end }}
         {{ with .Params.updated }}<div><dt>Last update</dt><dd>{{ . }}</dd></div>{{ end }}
