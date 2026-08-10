@@ -9,6 +9,10 @@
     <span class="topline__item topline__item--wide">{{ len (where site.RegularPages "Type" "evaluations") }} DATASETS ON FILE</span>
     <span class="topline__spacer"></span>
     <a class="topline__item topline__link" href="{{ "index.xml" | relURL }}">RSS</a>
+    <span class="topline__sep">/</span>
+    <button class="topline__item themetoggle" type="button" data-theme-toggle aria-live="polite">
+      <span class="themetoggle__mark" aria-hidden="true">◐</span><span data-theme-label>Auto</span>
+    </button>
   </div>
 </div>
 

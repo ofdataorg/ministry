@@ -66,6 +66,20 @@
   --space-3xl: 6rem;
   --space-section: clamp(var(--space-xl), 6vw, 5rem);
 
+  /* Semantic pairs so the two themes can disagree about what a
+     "reversed panel" should be. In light both are the navy/paper
+     inversion; in dark a full inversion would be a slab of white,
+     so panels lift instead and only buttons invert.          */
+  --paper-veil:  oklch(0.985 0.004 85 / .95);
+  --accent-bg:   var(--ink);
+  --accent-fg:   var(--paper);
+  --reverse-bg:  var(--ink);
+  --reverse-fg:  var(--paper);
+  --grain-blend: multiply;
+  --grain-opacity: .5;
+  --select:      oklch(0.470 0.170 25 / .18);
+  color-scheme: light;
+
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -94,13 +108,13 @@ h1, h2, h3, h4 { margin: 0; line-height: 1.1; }
 p { margin: 0 0 1em; }
 ul, ol { margin: 0; padding: 0; }
 
-::selection { background: oklch(0.470 0.170 25 / .18); }
+::selection { background: var(--select); }
 
 :focus-visible { outline: 3px solid var(--seal); outline-offset: 2px; }
 
 .skip {
   position: absolute; left: -9999px; top: 0; z-index: 200;
-  background: var(--ink); color: var(--paper);
+  background: var(--accent-bg); color: var(--accent-fg);
   padding: var(--space-xs) var(--space-sm);
   font-family: var(--ui); font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
 }
@@ -115,9 +129,9 @@ ul, ol { margin: 0; padding: 0; }
 
 /* Laid stock: a barely-there tooth, not a filter. */
 .grain {
-  position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .5;
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
+  mix-blend-mode: var(--grain-blend);
 }
 
 /* .chrome survives as a hook; the foil does not. Solid ink now. */
@@ -134,8 +148,8 @@ ul, ol { margin: 0; padding: 0; }
   text-decoration: none; color: var(--ink-2);
   transition: background .15s var(--ease-out-quart), border-color .15s, color .15s;
 }
-a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-.tag--hot { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); color: var(--accent-fg); }
+.tag--hot { background: var(--accent-bg); border-color: var(--accent-bg); color: var(--accent-fg); }
 .tag--ghost { color: var(--muted); }
 .taglist { display: flex; flex-wrap: wrap; gap: var(--space-3xs); list-style: none; margin-top: var(--space-md); }
 
@@ -149,16 +163,16 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
   text-decoration: none; cursor: pointer;
   transition: background .15s var(--ease-out-quart), color .15s, box-shadow .18s var(--ease-out-quart);
 }
-.btn--hot { background: var(--ink); color: var(--paper); }
+.btn--hot { background: var(--accent-bg); border-color: var(--accent-bg); color: var(--accent-fg); }
 .btn--hot:hover { background: var(--seal); border-color: var(--seal); }
-.btn--ghost:hover { background: var(--ink); color: var(--paper); }
+.btn--ghost:hover { background: var(--accent-bg); border-color: var(--accent-bg); color: var(--accent-fg); }
 .btn--big { font-size: var(--text-base); padding: 1em 1.9em; }
 
 /* ============================================================
    HEADER
    ============================================================ */
 /* The double rule of a printed masthead. */
-.stripbar { height: 6px; border-bottom: 1px solid var(--ink); background: var(--ink); }
+.stripbar { height: 6px; border-bottom: 1px solid var(--ink); background: var(--reverse-bg); }
 
 .topline {
   background: var(--paper-2);
@@ -178,7 +192,7 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
 
 .masthead {
   position: sticky; top: 0; z-index: 50;
-  background: oklch(0.985 0.004 85 / .95);
+  background: var(--paper-veil);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--ink);
 }
@@ -304,8 +318,8 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
    NOTICES STRIP — was a marquee, now a standing notice.
    ============================================================ */
 .ticker {
-  background: var(--ink); color: var(--paper);
-  border-block: 1px solid var(--ink);
+  background: var(--reverse-bg); color: var(--reverse-fg);
+  border-block: 1px solid var(--reverse-bg);
   padding-block: var(--space-2xs);
   font-family: var(--ui); font-weight: 600; text-transform: uppercase;
   letter-spacing: .12em; font-size: .68rem;
@@ -447,7 +461,7 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
   transition: color .15s, border-color .15s, background .15s;
 }
 .chip:hover { color: var(--ink); border-color: var(--ink); }
-.chip.is-on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.chip.is-on { background: var(--accent-bg); border-color: var(--accent-bg); color: var(--accent-fg); }
 .chip__n { font-family: var(--mono); font-size: .64rem; opacity: .7; }
 
 .segmented { display: inline-flex; border: 1px solid var(--rule); }
@@ -460,7 +474,7 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
 }
 .seg:last-child { border-right: 0; }
 .seg:hover { color: var(--ink); }
-.seg.is-on { background: var(--ink); color: var(--paper); }
+.seg.is-on { background: var(--accent-bg); color: var(--accent-fg); }
 
 .chips { display: flex; flex-wrap: wrap; gap: var(--space-2xs); list-style: none; }
 
@@ -598,7 +612,7 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
 }
 .meter__ticks {
   position: absolute; inset: 0;
-  background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), oklch(0.985 0.004 85 / .9) calc(10% - 1px) 10%);
+  background: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), var(--paper) calc(10% - 1px) 10%);
 }
 .meter__val {
   font-family: var(--display); font-size: var(--text-base); text-align: right;
@@ -944,7 +958,7 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
   padding: var(--space-sm); text-decoration: none;
   transition: background .15s var(--ease-out-quart), color .15s;
 }
-.termgrid a:hover { background: var(--ink); color: var(--paper); }
+.termgrid a:hover { background: var(--accent-bg); color: var(--accent-fg); }
 .termgrid__n { font-family: var(--mono); font-size: .7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .termgrid a:hover .termgrid__n { color: var(--paper); }
 .termgrid__name { font-family: var(--display); font-size: var(--text-base); }
@@ -952,16 +966,16 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
 /* ============================================================
    PROMO + PAGE NAV
    ============================================================ */
-.promo { background: var(--ink); padding: 0; }
+.promo { background: var(--reverse-bg); padding: 0; }
 .promo__in {
-  background: var(--ink); color: var(--paper);
+  background: var(--reverse-bg); color: var(--reverse-fg);
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md);
   padding-block: clamp(var(--space-lg), 4vw, var(--space-2xl));
 }
 .promo__title { font-family: var(--display); text-transform: uppercase; font-size: var(--display-sm); line-height: 1.1; letter-spacing: .03em; max-width: 20ch; }
-.promo__p { margin: var(--space-sm) 0 0; color: oklch(0.985 0.004 85 / .78); max-width: 56ch; }
-.promo .btn { margin-left: auto; border-color: var(--paper); color: var(--paper); background: transparent; }
-.promo .btn:hover { background: var(--paper); color: var(--ink); }
+.promo__p { margin: var(--space-sm) 0 0; color: var(--reverse-fg); opacity: .8; max-width: 56ch; }
+.promo .btn { margin-left: auto; border-color: var(--reverse-fg); color: var(--reverse-fg); background: transparent; }
+.promo .btn:hover { background: var(--reverse-fg); color: var(--reverse-bg); }
 
 .pagenav { display: flex; gap: var(--space-sm); padding-block: var(--space-lg) var(--space-2xl); flex-wrap: wrap; }
 .pagenav__link {
@@ -1029,9 +1043,117 @@ a.tag:hover { background: var(--ink); border-color: var(--ink); color: var(--pap
    ============================================================ */
 @media print {
   .grain, .ticker, .stripbar, .topline, .nav, .navtoggle, .promo, .pagenav, .filters { display: none !important; }
+  :root { --paper: #fff; --paper-2: #fff; --paper-3: #fff; --ink: #000;
+           --ink-2: #222; --muted: #555; --rule: #999; --rule-soft: #ccc;
+           --reverse-bg: #fff; --reverse-fg: #000; --accent-bg: #fff; --accent-fg: #000; }
   body { background: #fff; color: #000; font-size: 11pt; }
+  .logo { background-color: #000; }
   .masthead { position: static; background: none; border-bottom: 1pt solid #000; }
   .card, .track, .index tbody tr { border-color: #999; }
   .prose { max-width: none; }
   a { text-decoration: none; color: #000; }
 }
+
+/* ============================================================
+   DARK — the same paper, printed as a negative.
+
+   Not a different design: identical structure, rules and type,
+   with ink and stock exchanged. The navy stops being the mark
+   and becomes the ground, so the identity survives the flip.
+
+   `prefers-color-scheme` is the default signal; the toggle
+   stamps data-theme on the root and must win in both
+   directions.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; }
+  :root:not([data-theme="light"]) {
+    --paper:    oklch(0.175 0.030 257);
+    --paper-2:  oklch(0.215 0.032 257);
+    --paper-3:  oklch(0.265 0.034 257);
+
+    --ink:      oklch(0.940 0.008 85);
+    --ink-2:    oklch(0.810 0.012 85);
+    --muted:    oklch(0.680 0.016 85);
+
+    --rule:      oklch(0.940 0.008 85 / .22);
+    --rule-soft: oklch(0.940 0.008 85 / .10);
+
+    --seal:     oklch(0.680 0.170 25);
+    --seal-2:   oklch(0.740 0.150 25);
+    --pass:     oklch(0.760 0.140 150);
+
+    --paper-veil:  oklch(0.175 0.030 257 / .95);
+    --accent-bg:   var(--ink);
+    --accent-fg:   var(--paper);
+    --reverse-bg:  var(--paper-3);
+    --reverse-fg:  var(--ink);
+    --grain-blend: overlay;
+    --grain-opacity: .22;
+    --select:      oklch(0.680 0.170 25 / .30);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper:    oklch(0.175 0.030 257);
+  --paper-2:  oklch(0.215 0.032 257);
+  --paper-3:  oklch(0.265 0.034 257);
+
+  --ink:      oklch(0.940 0.008 85);
+  --ink-2:    oklch(0.810 0.012 85);
+  --muted:    oklch(0.680 0.016 85);
+
+  --rule:      oklch(0.940 0.008 85 / .22);
+  --rule-soft: oklch(0.940 0.008 85 / .10);
+
+  --seal:     oklch(0.680 0.170 25);
+  --seal-2:   oklch(0.740 0.150 25);
+  --pass:     oklch(0.760 0.140 150);
+
+  --paper-veil:  oklch(0.175 0.030 257 / .95);
+  --accent-bg:   var(--ink);
+  --accent-fg:   var(--paper);
+  --reverse-bg:  var(--paper-3);
+  --reverse-fg:  var(--ink);
+  --grain-blend: overlay;
+  --grain-opacity: .22;
+  --select:      oklch(0.680 0.170 25 / .30);
+}
+
+/* The arms are a single-ink silhouette, so they are drawn as a
+   mask filled with the current ink rather than shipped twice.
+   One asset, correct in both themes, crisp at any size. */
+.logo {
+  display: block;
+  background-color: var(--ink);
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center;  mask-position: center;
+  -webkit-mask-size: contain;     mask-size: contain;
+}
+.logo--crest {
+  aspect-ratio: 1283 / 757;
+  -webkit-mask-image: url("../logo/crest.png");
+  mask-image: url("../logo/crest.png");
+}
+.logo--lockup {
+  aspect-ratio: 1339 / 967;
+  -webkit-mask-image: url("../logo/lockup@2x.png");
+  mask-image: url("../logo/lockup@2x.png");
+}
+/* If masking is unsupported the mark would be a solid block —
+   fall back to nothing rather than to a navy rectangle. */
+@supports not ((-webkit-mask-image: url("#")) or (mask-image: url("#"))) {
+  .logo { background-color: transparent; }
+}
+
+/* ---------- theme control ---------- */
+.themetoggle {
+  display: inline-flex; align-items: center; gap: .4em;
+  background: none; border: 0; padding: 0 0 0 var(--space-2xs);
+  font: inherit; color: var(--ink-2); cursor: pointer;
+  text-transform: uppercase; letter-spacing: .12em;
+}
+.themetoggle:hover { color: var(--seal); }
+.themetoggle__mark { font-size: .9em; }

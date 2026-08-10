@@ -1,10 +1,12 @@
-{{- /* The crest. `variant` selects the crop: "crest" (default) for the
-       masthead, "lockup" for the full arms with the wordmark set under.
-       Pass alt:"" where adjacent text already names the organisation. */ -}}
+{{- /* The arms, drawn as a CSS mask filled with the current ink — one
+       asset that is correct in both themes. `variant` selects the crop:
+       "crest" for the masthead, "lockup" for the full arms with the
+       wordmark. Pass alt:"" where adjacent text already names us. */ -}}
 {{- $variant := .variant | default "crest" -}}
 {{- $alt := "Ministry of Data" -}}
 {{- if isset . "alt" }}{{ $alt = .alt }}{{ end -}}
-<img class="logo logo--{{ $variant }}"
-     src="{{ (printf "logo/%s.png" $variant) | relURL }}"
-     srcset="{{ (printf "logo/%s.png" $variant) | relURL }} 1x, {{ (printf "logo/%s@2x.png" $variant) | relURL }} 2x"
-     alt="{{ $alt }}" decoding="async">
+{{- if $alt -}}
+<span class="logo logo--{{ $variant }}" role="img" aria-label="{{ $alt }}"></span>
+{{- else -}}
+<span class="logo logo--{{ $variant }}" aria-hidden="true"></span>
+{{- end -}}

@@ -2,7 +2,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ site.Title }} — {{ site.Params.strapline }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsHome }}{{ site.Params.description }}{{ else }}{{ .Summary | plainify | truncate 160 }}{{ end }}{{ end }}">
-<meta name="theme-color" content="#fbfaf7">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#08111d" media="(prefers-color-scheme: dark)">
 
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:site_name" content="{{ site.Title }}">
@@ -25,4 +26,14 @@
 <link rel="preload" href="{{ "fonts/libre-caslon-display-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "fonts/public-sans-600.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/png">
-<script>document.documentElement.classList.replace('no-js','js');</script>
+<meta name="color-scheme" content="light dark">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.classList.replace('no-js', 'js');
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') d.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+</script>
