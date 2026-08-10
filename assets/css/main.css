@@ -199,7 +199,7 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
 .masthead__in { display: flex; align-items: center; gap: var(--space-sm); min-height: 76px; }
 
 .brand { display: flex; align-items: center; gap: var(--space-xs); text-decoration: none; margin-right: auto; }
-.brand .logo { width: auto; height: 46px; flex: none; }
+.brand .logo { width: auto; height: 48px; flex: none; }
 .brand__text { display: flex; flex-direction: column; line-height: 1; }
 .brand__name {
   font-family: var(--display); font-size: var(--text-md);
@@ -210,7 +210,7 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
   font-family: var(--mono); font-size: .58rem; letter-spacing: .14em;
   text-transform: uppercase; color: var(--muted); margin-top: var(--space-3xs);
 }
-@media (max-width: 520px) { .brand__sub { display: none; } .brand .logo { height: 38px; } }
+@media (max-width: 520px) { .brand__sub { display: none; } .brand .logo { height: 40px; } }
 
 .nav__list { display: flex; gap: 0; list-style: none; }
 .nav__link {
@@ -270,8 +270,8 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
   margin-bottom: var(--space-lg);
 }
 
-.hero__lockup { display: block; margin: 0 auto; width: min(100%, 480px); }
-.hero__lockup .logo { width: 100%; height: auto; }
+.hero__lockup { display: block; margin: 0 auto; }
+.hero__lockup .logo { height: clamp(190px, 34vw, 300px); width: auto; margin-inline: auto; }
 .hero__title {
   font-family: var(--display); font-size: var(--display-lg);
   line-height: 1.05; letter-spacing: .04em; text-transform: uppercase;
@@ -1000,7 +1000,7 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
   gap: clamp(var(--space-lg), 5vw, var(--space-2xl));
   padding-block: clamp(var(--space-lg), 5vw, var(--space-2xl));
 }
-.foot__brand .logo { height: 82px; width: auto; }
+.foot__brand .logo { height: 68px; width: auto; }
 .foot__blurb { margin-top: var(--space-sm); color: var(--ink-2); max-width: 40ch; font-size: var(--text-sm); }
 .foot__stamp { font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; color: var(--muted); line-height: 2; text-transform: uppercase; }
 .foot__cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-md); }
@@ -1133,12 +1133,12 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
   -webkit-mask-size: contain;     mask-size: contain;
 }
 .logo--crest {
-  aspect-ratio: 1283 / 757;
+  aspect-ratio: 320 / 318;
   -webkit-mask-image: url("../logo/crest.png");
   mask-image: url("../logo/crest.png");
 }
 .logo--lockup {
-  aspect-ratio: 1339 / 967;
+  aspect-ratio: 700 / 1031;
   -webkit-mask-image: url("../logo/lockup@2x.png");
   mask-image: url("../logo/lockup@2x.png");
 }

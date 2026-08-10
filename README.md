@@ -94,8 +94,9 @@ Caslon Text for reading, Public Sans for UI and tables, Spline Sans Mono for sco
 historic face of British state printing and Public Sans is literally a government typeface — the
 choices are the concept, not decoration.
 
-**The arms** are in `brand/`, with derivation commands in `brand/README.md`. They are dark ink on
-transparency, which is why the site is light: the mark cannot exist on a black page.
+**The emblem** is in `brand/`, with derivation commands in `brand/README.md`. It is a single-ink
+silhouette, so the site draws it as a CSS `mask-image` filled with the current ink — one asset that
+renders navy on paper and off-white on navy, and never needs a reversed copy.
 
 **Tokens**: a 4pt spacing scale with semantic names, a six-step type scale, exponential ease-out
 curves. Nothing animates a layout property. Components that need to respond to their column rather
