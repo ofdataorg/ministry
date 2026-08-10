@@ -48,10 +48,18 @@ nodes:
     title: Bologna
     level: municipal
     parent: emilia-romagna
+  - id: lombardia
+    title: Lombardia
+    level: regional
+    parent: italy
 
   - id: united-states
     title: United States
     level: national
+  - id: new-york-city
+    title: New York City
+    level: municipal
+    parent: united-states
   - id: brazil
     title: Brazil
     level: national
