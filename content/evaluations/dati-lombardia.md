@@ -9,7 +9,7 @@ domains: ["Governance", "Environment", "Health"]
 licenses: ["CC0 1.0"]
 
 source: "https://www.dati.lombardia.it/"
-version: "Catalogue as at 10 August 2026 — 4,404 assets, 2,905 datasets"
+version: "Catalogue as at 10 August 2026 — 4,404 assets, 2,905 datasets; 300 sampled and downloaded"
 snapshot: 2026-08-10
 temporal: "Varies by dataset"
 updated: "Continuously for a small live core"
@@ -21,13 +21,19 @@ access: "Open API and bulk download, no registration"
 verdict: "Four hundred and forty-four datasets describe themselves as prompt. Their median age is seven years."
 reviewer: "Ministry desk"
 
+history:
+  - date: 2026-08-10
+    version: "Catalogue as at 10 August 2026 — 4,404 assets, 2,905 datasets"
+    note: "First scoring, from catalogue metadata. Superseded the same day by [an audit of 300 randomly sampled datasets](/analyses/we-opened-six-hundred-datasets/), which found 65.4% of the catalogue shares a column schema with another dataset and 31.7% of datasets carry a wholly empty column. Completeness and interoperability revised down."
+    scores: { completeness: 7, timeliness: 2, documentation: 3, accessibility: 9, licensing: 9, interoperability: 7 }
+
 scores:
-  completeness: 7
+  completeness: 6
   timeliness: 2
   documentation: 3
   accessibility: 9
   licensing: 9
-  interoperability: 7
+  interoperability: 6
 
 strengths:
   - "**82.1% of the catalogue is CC0** — a public domain dedication as the default, which is the most permissive choice a public body can make and almost nobody makes it."
@@ -37,6 +43,7 @@ weaknesses:
   - "**444 datasets declare their cadence as `Tempestiva` — prompt — and have a median age of 2,701 days. Four of them are actually current.**"
   - "Only 27.6% of testable cadence promises are kept overall. Weekly series sit at a median of five years, monthly at four."
   - "Half the catalogue barely describes itself: 50.1% of assets have a description under 80 characters, and only 16.0% of columns carry one."
+  - "**65.4% of datasets share a column schema with another** — 2,902 datasets rest on 1,312 distinct schemas, and 884 are the same template refiled by a different comune."
 
 bestfor:
   - "Anything where a CC0 licence removes a legal obstacle"
@@ -115,6 +122,32 @@ the cadence field itself is published under two different key spellings —
 358 — with inconsistent capitalisation in the values (`settimanale` and `Settimanale` both appear).
 Any harvester that keys on one spelling silently loses a seventh of the catalogue.
 
+## What 300 downloads showed
+
+We drew a random sample of 300 official datasets and pulled 200 rows from each; the method and the
+cross-portal comparison are in
+[We Opened Six Hundred Datasets](/analyses/we-opened-six-hundred-datasets/).
+
+Access held up: **300 of 300 downloaded**, median response 0.23 seconds — faster than New York on the
+same platform. Seven returned a valid file with no rows in it, which is a catalogue entry pretending
+to be a dataset, but 97.7% were usable.
+
+The structural finding is duplication. **65.4% of Lombardia's datasets share a column signature with
+another dataset**; 2,902 datasets rest on just 1,312 distinct schemas. Strip the municipality from
+the titles and the templates appear: 37 *Parcheggi*, 27 *Elenco delle aree di circolazione*, 22
+*Quantità rifiuti prodotta*, 20 *Aree verdi informazioni*. In total **884 datasets — 30.4% of the
+catalogue — are one form refiled by a different comune.**
+
+That is a legitimate way to publish; each comune's parking data really is its own data. But it means
+breadth is far narrower than 4,404 suggests, and it explains the empty columns exactly. 31.7% of
+sampled datasets carry at least one wholly empty column, and the pattern is unmistakable: `Comune di
+Formigara — Parcheggi` and `Comune di Ripalta Guerina — Parcheggi` have the *same* 12 of 26 columns
+blank. One template, sent to different clerks, filled in to the same depth.
+
+Also here, as in New York: **20.6% of columns declared `Text` hold only numbers** — the identical
+figure on both portals, which makes it the platform's ingest default rather than anything Lombardia
+chose.
+
 ## Working with it
 
 Ignore the cadence labels and read `data_updated_at` directly from the API. On this portal the
@@ -129,7 +162,7 @@ the sensor feeds behave. It is just much smaller than the catalogue implies.
 
 ## The call
 
-**Grade B−.** On licensing this is a model for every European regional government: CC0 by default,
+**Grade B−**, revised down within the band after the sampling. On licensing this is a model for every European regional government: CC0 by default,
 applied at scale, no conditions to negotiate. The access and API engineering are as good as New
 York's because they are the same platform.
 

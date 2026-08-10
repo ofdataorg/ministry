@@ -9,7 +9,7 @@ domains: ["Governance", "Mobility", "Housing"]
 licenses: ["None stated"]
 
 source: "https://opendata.cityofnewyork.us/"
-version: "Catalogue as at 10 August 2026 — 3,014 assets, 2,396 datasets"
+version: "Catalogue as at 10 August 2026 — 3,014 assets, 2,396 datasets; 300 sampled and downloaded"
 snapshot: 2026-08-10
 temporal: "Varies by dataset; many series run from the 2000s"
 updated: "Continuously for automated feeds"
@@ -21,13 +21,19 @@ access: "Open API and bulk download, no registration"
 verdict: "The best-run municipal data operation in the world, publishing three thousand datasets that nobody has said you are allowed to use."
 reviewer: "Ministry desk"
 
+history:
+  - date: 2026-08-10
+    version: "Catalogue as at 10 August 2026 — 3,014 assets, 2,396 datasets"
+    note: "First scoring, from catalogue metadata and two sample downloads. Superseded the same day by [an audit of 300 randomly sampled datasets](/analyses/we-opened-six-hundred-datasets/), which found 12.3% of columns entirely empty and 20.6% of Text-declared columns holding only numbers — evidence not visible from the catalogue. Completeness and interoperability revised down."
+    scores: { completeness: 8, timeliness: 6, documentation: 6, accessibility: 9, licensing: 3, interoperability: 8 }
+
 scores:
-  completeness: 8
+  completeness: 7
   timeliness: 6
   documentation: 6
   accessibility: 9
   licensing: 3
-  interoperability: 8
+  interoperability: 7
 
 strengths:
   - "**Every single dataset declares an update frequency** — 2,396 out of 2,396. No other catalogue we have measured manages that."
@@ -37,6 +43,7 @@ weaknesses:
   - "**2,935 of 3,014 assets — 97.4% — state no licence at all**, and the portal grants none either. The flagship 311 dataset is among them."
   - "Only 65.9% of testable cadence promises are kept. Annual series manage 53.2%, six-monthly 55.6%, weekly 57.9%."
   - "Median dataset was last updated 1,039 days ago and 48% have not moved in over four years, even though the live ones are genuinely live."
+  - "In a 300-dataset sample, 12.3% of columns came back entirely empty — 333 of 464 in the 2020 DOE Middle School Directory alone — and 20.6% of columns declared `Text` hold only numbers."
 
 bestfor:
   - "City operations, 311, transport and buildings data at real scale"
@@ -125,6 +132,30 @@ One padding complaint: 143 catalogue entries are of type `href`. They are links 
 Citi Bike System Data, Citywide Crime Statistics — counted as catalogue assets. They are useful
 signposts and they are not datasets, and a headline count of 3,014 quietly includes them.
 
+## What 300 downloads showed
+
+Catalogue metadata is where the scoring above starts, not where it ends. We drew a random sample of
+300 official datasets and pulled 200 rows from each; the full method and cross-portal comparison is
+in [We Opened Six Hundred Datasets](/analyses/we-opened-six-hundred-datasets/).
+
+The access story held up completely: **299 of 300 downloaded**, none returned an empty file, median
+response 0.66 seconds. For a catalogue this size that is a genuinely strong result and it confirms
+the accessibility score.
+
+Two findings pulled the other way. **12.3% of all columns in the sample were entirely empty** —
+996 of 8,067 — and 18.1% of datasets carried at least one. The concentration is extreme: the 2020
+DOE Middle School Directory publishes 464 columns of which **333 contain nothing at all**, and 88%
+of its cells are blank. These are wide survey instruments exported whole, with every unasked
+question preserved as a column. The rows that exist are fine; the schema is several times larger
+than the data, and a user has to discover that by opening it.
+
+And **20.6% of columns declared `Text` contain only numbers** — a fifth of the numeric columns
+arrive as strings that will not sum until cast. Lombardia, on the same platform, produced the
+identical figure to the decimal, which tells you this is the ingest default rather than anything
+New York decided. It is still work the consumer pays for.
+
+Neither finding is visible from the catalogue. Both moved the grade.
+
 ## Working with it
 
 Use the SODA API, not the download button. `https://data.cityofnewyork.us/resource/{id}.csv?$limit=`
@@ -140,10 +171,10 @@ almost certainly fine in practice and that is not the same as being fine.
 
 ## The call
 
-**Grade B.** Operationally this is close to the best municipal data programme in the world: the
+**Grade B−**, revised down from B after the sampling. Operationally this is close to the best municipal data programme in the world: the
 scale is real, the API is excellent, and the cadence metadata is the most complete we have measured
 anywhere. The engineering deserves an A−.
 
-What holds it to a B is a single omission that a lawyer could fix in an afternoon. Attach CC0 or
+What holds it back is a single omission that a lawyer could fix in an afternoon. Attach CC0 or
 CC BY 4.0 to the catalogue, as Lombardia has, and this becomes one of the highest-scoring entries on
 this site. Until then the City has built a magnificent library and forgotten to unlock the door.
