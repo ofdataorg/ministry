@@ -70,16 +70,21 @@
 
 {{ with site.GetPage "/places" }}
   {{ $axes := site.Params.scorecard.axes }}
+  {{ $nodes := site.Data.places.nodes }}
+  {{/* Only compare like with like — the national league, not a flat list. */}}
   {{ $rows := slice }}
-  {{ range .Data.Terms.Alphabetical }}
-    {{ $rows = $rows | append (dict "page" .Page "count" .Count "pages" .Page.Pages
-        "score" (partial "func/placescore.html" .Page.Pages)) }}
+  {{ range where $nodes "level" "national" }}
+    {{ with site.GetPage (printf "/places/%s" .id) }}
+      {{ $rows = $rows | append (dict "page" . "pages" .Pages
+          "own" (where .Pages "Params.place" .Title)
+          "score" (partial "func/placescore.html" .Pages)) }}
+    {{ end }}
   {{ end }}
   {{ $rows = sort $rows "score" "desc" }}
 <section class="wrap band">
   <div class="band__head">
     <h2 class="band__title">The Index</h2>
-    <p class="band__note">Places ranked on the same six axes</p>
+    <p class="band__note">National league — jurisdictions ranked against their peers</p>
     <a class="band__more" href="{{ .RelPermalink }}">Full index →</a>
   </div>
 
@@ -88,19 +93,19 @@
       <thead>
         <tr>
           <th class="index__rank" scope="col">#</th>
-          <th scope="col">Place</th>
-          <th class="index__n" scope="col"><abbr title="Datasets evaluated">N</abbr></th>
+          <th scope="col">Country</th>
+          <th class="index__n" scope="col"><abbr title="Datasets evaluated, including nested jurisdictions">N</abbr></th>
           <th class="index__score" scope="col">Score</th>
           {{ range $axes }}<th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>{{ end }}
         </tr>
       </thead>
       <tbody>
-        {{ range $i, $r := first 5 $rows }}
+        {{ range $i, $r := $rows }}
           {{ $t := "low" }}{{ if ge $r.score 7.8 }}{{ $t = "high" }}{{ else if ge $r.score 5.8 }}{{ $t = "mid" }}{{ end }}
-          <tr{{ if lt $r.count 3 }} class="index__row--thin"{{ end }}>
+          <tr{{ if lt (len $r.pages) 3 }} class="index__row--thin"{{ end }}>
             <td class="index__rank">{{ add $i 1 }}</td>
-            <th class="index__place" scope="row"><a href="{{ $r.page.RelPermalink }}">{{ $r.page.Title }}</a>{{ if lt $r.count 3 }}<span class="index__flag" title="Fewer than three datasets">thin</span>{{ end }}</th>
-            <td class="index__n">{{ $r.count }}</td>
+            <th class="index__place" scope="row"><a href="{{ $r.page.RelPermalink }}">{{ $r.page.Title }}</a>{{ if not $r.own }}<span class="index__flag index__flag--derived" title="Score derived entirely from nested jurisdictions">derived</span>{{ end }}{{ if lt (len $r.pages) 3 }}<span class="index__flag" title="Fewer than three datasets">thin</span>{{ end }}</th>
+            <td class="index__n">{{ len $r.pages }}</td>
             <td class="index__score index__score--{{ $t }}">{{ lang.FormatNumber 0 (mul $r.score 10) }}<span class="index__pc">%</span></td>
             {{ range $axes }}
               <td class="index__axis">{{ partial "stack.html" (dict "score" (partial "func/axismean.html" (dict "pages" $r.pages "axis" .)) "label" (printf "%s — %s" $r.page.Title (. | humanize))) }}</td>
@@ -117,7 +122,7 @@
   <div class="band__head">
     <h2 class="band__title">Worldwide</h2>
     <p class="band__note">Every dataset we hold, filed by where it comes from</p>
-    <a class="band__more" href="{{ "regions" | relURL }}">Index →</a>
+    <a class="band__more" href="{{ "regions" | relURL }}">All regions →</a>
   </div>
 
   <ul class="chips">

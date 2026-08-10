@@ -3,7 +3,8 @@ title: "Emilia-Romagna Defibrillator Registry"
 date: 2026-07-30
 publishers: ["Comune di Bologna"]
 regions: ["Europe"]
-places: ["Bologna"]
+place: "Emilia-Romagna"
+places: ["European Union", "Italy", "Emilia-Romagna"]
 domains: ["Health", "Geospatial"]
 licenses: ["CC BY 4.0"]
 

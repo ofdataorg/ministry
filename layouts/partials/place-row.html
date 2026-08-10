@@ -1,0 +1,44 @@
+{{- /* One row of the jurisdiction tree. Recurses into children.
+       dict "node" N "children" MAP "depth" D "axes" A */ -}}
+{{- $node := .node -}}
+{{- $children := .children -}}
+{{- $depth := .depth -}}
+{{- $axes := .axes -}}
+
+{{- $term := site.GetPage (printf "/places/%s" $node.id) -}}
+{{- $roll := slice -}}
+{{- with $term }}{{ $roll = .Pages }}{{ end -}}
+{{- $own := where $roll "Params.place" $node.title -}}
+{{- $score := partial "func/placescore.html" $roll -}}
+{{- $tier := "low" -}}
+{{- if ge $score 7.8 }}{{ $tier = "high" }}{{ else if ge $score 5.8 }}{{ $tier = "mid" }}{{ end -}}
+
+<tr class="tree__row tree__row--d{{ $depth }}{{ if lt (len $roll) 3 }} index__row--thin{{ end }}">
+  <th class="index__place tree__cell" scope="row" style="--depth:{{ $depth }}">
+    <span class="tree__indent" aria-hidden="true"></span>
+    {{ if $term }}<a href="{{ $term.RelPermalink }}">{{ $node.title }}</a>
+    {{ else }}<span class="tree__dead">{{ $node.title }}</span>{{ end }}
+    <span class="tree__level">{{ $node.level }}</span>
+    {{ if and $roll (not $own) }}<span class="index__flag index__flag--derived" title="Nothing evaluated at this level — the score comes entirely from jurisdictions nested inside it">derived</span>{{ end }}
+  </th>
+  <td class="index__n">{{ if $own }}{{ len $own }}{{ else }}<span class="tree__zero">—</span>{{ end }}</td>
+  <td class="index__n">{{ len $roll }}</td>
+  <td class="index__score index__score--{{ $tier }}">
+    {{- if $roll }}{{ lang.FormatNumber 0 (mul $score 10) }}<span class="index__pc">%</span>{{ else }}<span class="tree__zero">—</span>{{ end -}}
+  </td>
+  {{ range $axes }}
+    <td class="index__axis">
+      {{ if $roll }}
+        {{ partial "stack.html" (dict
+            "score" (partial "func/axismean.html" (dict "pages" $roll "axis" .))
+            "label" (printf "%s — %s" $node.title (. | humanize))) }}
+      {{ end }}
+    </td>
+  {{ end }}
+</tr>
+
+{{- with index $children $node.id -}}
+  {{- range . -}}
+    {{- partial "place-row.html" (dict "node" . "children" $children "depth" (add $depth 1) "axes" $axes) -}}
+  {{- end -}}
+{{- end -}}

@@ -1,22 +1,20 @@
 {{ define "main" }}
 {{ $axes := site.Params.scorecard.axes }}
 {{ $all := where site.RegularPages "Type" "evaluations" }}
+{{ $nodes := site.Data.places.nodes }}
 
-{{/* Build one row per place, then rank by overall score. */}}
-{{ $rows := slice }}
-{{ range .Data.Terms.Alphabetical }}
-  {{ $pages := .Page.Pages }}
-  {{ $rows = $rows | append (dict
-      "page"  .Page
-      "count" .Count
-      "pages" $pages
-      "score" (partial "func/placescore.html" $pages)) }}
+{{/* children map, keyed by parent id ("" for roots) */}}
+{{ $children := dict }}
+{{ range $nodes }}
+  {{ $p := .parent | default "" }}
+  {{ $cur := index $children $p | default slice }}
+  {{ $children = merge $children (dict $p ($cur | append .)) }}
 {{ end }}
-{{ $rows = sort $rows "score" "desc" }}
+{{ $roots := index $children "" }}
 
 <header class="pagehead">
   <div class="wrap">
-    <p class="pagehead__kicker">The Index · {{ len $rows }} places · {{ len $all }} datasets</p>
+    <p class="pagehead__kicker">The Index · {{ len $nodes }} jurisdictions · {{ len $all }} datasets</p>
     <h1 class="pagehead__title">{{ .Title }}</h1>
     {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
   </div>
@@ -26,78 +24,98 @@
   <div class="legend">
     <p class="legend__title">How to read a row</p>
     <ul class="legend__keys">
-      {{ range $axes }}
-        <li><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr> {{ . | humanize }}</li>
-      {{ end }}
+      {{ range $axes }}<li><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr> {{ . | humanize }}</li>{{ end }}
     </ul>
     <p class="legend__note">
-      Each bar is ten segments, one point each. Filled segments are the mean score for that axis
-      across the place's datasets. <span class="legend__swatch legend__swatch--high"></span> 7.8+
+      <strong>Own</strong> counts datasets published by that jurisdiction itself.
+      <strong>All</strong> counts everything beneath it in the tree, which is what the score and the
+      bars measure. Each bar is ten segments, one point each.
+      <span class="legend__swatch legend__swatch--high"></span> 7.8+
       <span class="legend__swatch legend__swatch--mid"></span> 5.8–7.7
       <span class="legend__swatch legend__swatch--low"></span> below 5.8
     </p>
   </div>
 
   <div class="table-scroll">
-    <table class="index">
+    <table class="index index--tree">
       <thead>
         <tr>
-          <th class="index__rank" scope="col">#</th>
-          <th scope="col">Place</th>
-          <th class="index__n" scope="col"><abbr title="Datasets evaluated">N</abbr></th>
+          <th scope="col">Jurisdiction</th>
+          <th class="index__n" scope="col"><abbr title="Datasets published at this level">Own</abbr></th>
+          <th class="index__n" scope="col"><abbr title="Datasets including everything nested beneath">All</abbr></th>
           <th class="index__score" scope="col">Score</th>
-          {{ range $axes }}
-            <th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>
-          {{ end }}
+          {{ range $axes }}<th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>{{ end }}
         </tr>
       </thead>
       <tbody>
-        {{ range $i, $r := $rows }}
-          {{ $pct := mul $r.score 10 }}
-          {{ $tier := "low" }}
-          {{ if ge $r.score 7.8 }}{{ $tier = "high" }}{{ else if ge $r.score 5.8 }}{{ $tier = "mid" }}{{ end }}
-          <tr{{ if lt $r.count 3 }} class="index__row--thin"{{ end }}>
-            <td class="index__rank">{{ add $i 1 }}</td>
-            <th class="index__place" scope="row">
-              <a href="{{ $r.page.RelPermalink }}">{{ $r.page.Title }}</a>
-              {{ if lt $r.count 3 }}<span class="index__flag" title="Fewer than three datasets — treat this score as indicative only">thin</span>{{ end }}
-            </th>
-            <td class="index__n">{{ $r.count }}</td>
-            <td class="index__score index__score--{{ $tier }}">{{ lang.FormatNumber 0 $pct }}<span class="index__pc">%</span></td>
-            {{ range $axes }}
-              <td class="index__axis">
-                {{ partial "stack.html" (dict
-                    "score" (partial "func/axismean.html" (dict "pages" $r.pages "axis" .))
-                    "label" (printf "%s — %s" $r.page.Title (. | humanize))) }}
-              </td>
-            {{ end }}
-          </tr>
+        {{ range $roots }}
+          {{ partial "place-row.html" (dict "node" . "children" $children "depth" 0 "axes" $axes) }}
         {{ end }}
       </tbody>
       <tfoot>
         <tr>
-          <td class="index__rank"></td>
           <th class="index__place" scope="row">Whole catalogue</th>
+          <td class="index__n">{{ len $all }}</td>
           <td class="index__n">{{ len $all }}</td>
           <td class="index__score">{{ lang.FormatNumber 0 (mul (partial "func/placescore.html" $all) 10) }}<span class="index__pc">%</span></td>
           {{ range $axes }}
-            <td class="index__axis">
-              {{ partial "stack.html" (dict
-                  "score" (partial "func/axismean.html" (dict "pages" $all "axis" .))
-                  "label" (printf "Catalogue — %s" (. | humanize))) }}
-            </td>
+            <td class="index__axis">{{ partial "stack.html" (dict "score" (partial "func/axismean.html" (dict "pages" $all "axis" .)) "label" (printf "Catalogue — %s" (. | humanize))) }}</td>
           {{ end }}
         </tr>
       </tfoot>
     </table>
   </div>
 
+  <div class="band__head band__head--spaced">
+    <h2 class="band__title">Ranked among peers</h2>
+    <p class="band__note">A city is only comparable to a city</p>
+  </div>
+
+  <p class="index__caveat index__caveat--lead">
+    Places are ranked only against others at the same level of government. Putting a commune and a
+    union of twenty-seven states in one league table would be a category error, so we do not — the
+    tree above shows containment, these tables show competition.
+  </p>
+
+  <div class="peers">
+    {{ range site.Data.places.levels }}
+      {{ $lvl := . }}
+      {{ $rows := slice }}
+      {{ range where $nodes "level" $lvl.id }}
+        {{ $term := site.GetPage (printf "/places/%s" .id) }}
+        {{ with $term }}
+          {{ $rows = $rows | append (dict "page" . "pages" .Pages "own" (where .Pages "Params.place" .Title) "score" (partial "func/placescore.html" .Pages)) }}
+        {{ end }}
+      {{ end }}
+      {{ if $rows }}
+        {{ $rows = sort $rows "score" "desc" }}
+        <section class="peers__group">
+          <h3 class="peers__title">{{ $lvl.label }}</h3>
+          <p class="peers__note">{{ $lvl.note }}</p>
+          <ol class="peers__list">
+            {{ range $i, $r := $rows }}
+              {{ $t := "low" }}{{ if ge $r.score 7.8 }}{{ $t = "high" }}{{ else if ge $r.score 5.8 }}{{ $t = "mid" }}{{ end }}
+              <li class="peers__item{{ if lt (len $r.pages) 3 }} index__row--thin{{ end }}">
+                <span class="peers__rank">{{ add $i 1 }}</span>
+                <a class="peers__name" href="{{ $r.page.RelPermalink }}">{{ $r.page.Title }}</a>{{ if not $r.own }}<span class="index__flag index__flag--derived" title="Score derived entirely from nested jurisdictions">derived</span>{{ end }}
+                <span class="peers__n">{{ len $r.pages }}</span>
+                {{ partial "stack.html" (dict "score" $r.score "label" $r.page.Title) }}
+                <span class="peers__score peers__score--{{ $t }}">{{ lang.FormatNumber 0 (mul $r.score 10) }}%</span>
+              </li>
+            {{ end }}
+          </ol>
+          {{ if eq (len $rows) 1 }}<p class="peers__solo">Only one {{ lower $lvl.label }} jurisdiction on file — nothing to rank it against yet.</p>{{ end }}
+        </section>
+      {{ end }}
+    {{ end }}
+  </div>
+
   <p class="index__caveat">
     A place's score is the plain mean of its datasets' six-axis means — no weighting, same as
-    <a href="{{ "method" | relURL }}">the rubric</a>. It measures <em>the datasets we have
-    evaluated</em>, not everything a jurisdiction publishes, so a place with one dataset is not
-    comparable to one with ten. Rows resting on fewer than three evaluations are flagged
-    <span class="index__flag">thin</span>.
+    <a href="{{ "method" | relURL }}">the rubric</a> — computed over everything nested beneath it. It
+    measures <em>the datasets we have evaluated</em>, not everything a jurisdiction publishes, so
+    rows resting on fewer than three evaluations are flagged <span class="index__flag">thin</span>
+    and should be read as indicative only.
   </p>
 </div>
 {{ end }}

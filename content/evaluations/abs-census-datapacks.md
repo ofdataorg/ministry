@@ -3,6 +3,7 @@ title: "ABS Census DataPacks"
 date: 2026-04-27
 publishers: ["Australian Bureau of Statistics"]
 regions: ["Oceania"]
+place: "Australia"
 places: ["Australia"]
 domains: ["Population", "Housing"]
 licenses: ["CC BY 4.0"]

@@ -1,0 +1,66 @@
+# The jurisdictional tree behind The Index.
+#
+# Each evaluation carries `place` (the single jurisdiction whose data it is)
+# and `places` (that jurisdiction plus every ancestor, which is what the
+# taxonomy indexes). So a place's term page rolls up everything beneath it,
+# while `place` identifies what it publishes in its own right.
+#
+# `id` must equal the urlized form of `title` — it is the term page slug.
+
+levels:
+  - id: global
+    label: Global
+    note: Worldwide in scope, belonging to no single jurisdiction
+  - id: supranational
+    label: Supranational
+    note: Unions and multi-country programmes
+  - id: national
+    label: National
+    note: Sovereign states
+  - id: regional
+    label: Regional
+    note: Sub-national regions, states and provinces
+  - id: municipal
+    label: Municipal
+    note: Cities and communes
+
+nodes:
+  - id: global
+    title: Global
+    level: global
+
+  - id: pan-african
+    title: Pan-African
+    level: supranational
+
+  - id: european-union
+    title: European Union
+    level: supranational
+  - id: italy
+    title: Italy
+    level: national
+    parent: european-union
+  - id: emilia-romagna
+    title: Emilia-Romagna
+    level: regional
+    parent: italy
+  - id: bologna
+    title: Bologna
+    level: municipal
+    parent: emilia-romagna
+
+  - id: united-states
+    title: United States
+    level: national
+  - id: brazil
+    title: Brazil
+    level: national
+  - id: japan
+    title: Japan
+    level: national
+  - id: india
+    title: India
+    level: national
+  - id: australia
+    title: Australia
+    level: national

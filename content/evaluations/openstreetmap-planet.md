@@ -3,6 +3,7 @@ title: "OpenStreetMap Planet"
 date: 2026-06-22
 publishers: ["OpenStreetMap Foundation"]
 regions: ["Global"]
+place: "Global"
 places: ["Global"]
 domains: ["Mobility", "Geospatial"]
 licenses: ["ODbL 1.0"]

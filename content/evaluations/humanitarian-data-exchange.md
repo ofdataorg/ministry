@@ -3,6 +3,7 @@ title: "Humanitarian Data Exchange (HDX)"
 date: 2026-04-02
 publishers: ["UN OCHA Centre for Humanitarian Data"]
 regions: ["Global", "Africa", "Asia"]
+place: "Global"
 places: ["Global"]
 domains: ["Humanitarian", "Governance"]
 licenses: ["Mixed — per contributing organisation"]

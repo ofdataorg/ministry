@@ -958,7 +958,9 @@ a.tag:hover { background: var(--hot-deep); border-color: var(--hot-deep); color:
   font-family: var(--mono); font-size: .55rem; letter-spacing: .14em;
   text-transform: uppercase; color: var(--bg);
   background: var(--dim); padding: .15em .4em;
+  vertical-align: middle;
 }
+.index__flag--derived { background: var(--hot-2); }
 
 .index tfoot td, .index tfoot th {
   padding-top: var(--space-xs); border-top: 3px solid var(--ink);
@@ -973,6 +975,74 @@ a.tag:hover { background: var(--hot-deep); border-color: var(--hot-deep); color:
 .index__caveat a { color: var(--acid); }
 
 .index--matrix .index__place a { white-space: normal; font-size: var(--text-base); }
+
+/* ---------- jurisdiction tree ---------- */
+.tree__cell { padding-left: calc(var(--space-xs) + (var(--depth, 0) * 1.35rem)); position: relative; }
+.tree__indent {
+  position: absolute; left: calc(var(--space-xs) + ((var(--depth, 0) - 1) * 1.35rem) + .3rem);
+  top: 50%; width: .8rem; height: 1px; background: var(--line);
+}
+.tree__row--d0 .tree__indent { display: none; }
+.tree__row--d0 .index__place a { font-size: var(--text-md); }
+.tree__row--d1 .index__place a,
+.tree__row--d2 .index__place a,
+.tree__row--d3 .index__place a { font-size: var(--text-base); color: var(--muted); }
+.tree__row--d1 .index__place a:hover,
+.tree__row--d2 .index__place a:hover,
+.tree__row--d3 .index__place a:hover { color: var(--hot-2); }
+.tree__level {
+  display: inline-block; margin-left: var(--space-2xs);
+  font-family: var(--mono); font-size: .53rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim);
+  border: 1px solid var(--line); padding: .1em .35em;
+}
+.tree__zero { color: var(--dim); }
+.tree__dead { font-family: var(--cond); font-weight: 700; text-transform: uppercase; color: var(--dim); }
+
+/* ---------- peer league tables ---------- */
+.peers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: var(--space-md); }
+.peers__group { border: 1px solid var(--line); background: var(--bg-2); padding: var(--space-md); }
+.peers__title {
+  font-family: var(--cond); font-weight: 700; font-size: var(--text-md);
+  text-transform: uppercase; letter-spacing: .13em; color: var(--hot);
+}
+.peers__note {
+  margin: var(--space-3xs) 0 var(--space-sm);
+  font-family: var(--mono); font-size: .6rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dim); line-height: 1.6;
+}
+.peers__list { list-style: none; display: grid; gap: var(--space-2xs); }
+.peers__item {
+  display: grid; grid-template-columns: 1.4rem 1fr 1.8rem auto 2.9rem;
+  align-items: center; gap: var(--space-2xs);
+  padding-bottom: var(--space-2xs); border-bottom: 1px solid var(--line-soft);
+}
+.peers__item:last-child { border-bottom: 0; padding-bottom: 0; }
+.peers__rank { font-family: var(--mono); font-size: .72rem; color: var(--dim); }
+.peers__name {
+  font-family: var(--cond); font-weight: 700; font-size: var(--text-base);
+  text-transform: uppercase; letter-spacing: .02em; text-decoration: none;
+}
+.peers__name:hover { color: var(--hot-2); }
+.peers__n { font-family: var(--mono); font-size: .64rem; color: var(--dim); text-align: right; }
+.peers__score { font-family: var(--display); font-size: var(--text-base); text-align: right; }
+.peers__score--high { color: var(--acid); }
+.peers__score--low { color: var(--hot); }
+.peers__solo {
+  margin: var(--space-sm) 0 0; font-size: var(--text-sm); color: var(--dim); line-height: 1.5;
+}
+.peers__list--kids .peers__item { border-bottom: 1px solid var(--line); padding-block: var(--space-2xs); }
+.peers__list--kids { max-width: 44rem; }
+.peers__list--kids .peers__rank { color: var(--hot); }
+@media (max-width: 520px) { .peers__item { grid-template-columns: 1.2rem 1fr auto 2.7rem; } .peers__item .stack { display: none; } }
+
+.index__jur {
+  font-family: var(--mono); font-size: .64rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--dim); white-space: nowrap;
+}
+.index__row--nested .index__place a { color: var(--muted); }
+.index__row--nested .index__jur { color: var(--hot-2); }
+.index__caveat--lead { margin-top: 0; margin-bottom: var(--space-md); }
 
 /* ---------- place card ---------- */
 .placecard {

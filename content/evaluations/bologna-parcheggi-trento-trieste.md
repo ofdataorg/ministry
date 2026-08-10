@@ -3,7 +3,8 @@ title: "Bologna Parking Sensors — Trento e Trieste"
 date: 2026-07-29
 publishers: ["Comune di Bologna"]
 regions: ["Europe"]
-places: ["Bologna"]
+place: "Bologna"
+places: ["European Union", "Italy", "Emilia-Romagna", "Bologna"]
 domains: ["Mobility"]
 licenses: ["CC BY 4.0"]
 

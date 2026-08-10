@@ -38,6 +38,22 @@ in `layouts/partials/func/grade.html`. Change the bands in one place and the who
 
 The scoring rubric itself is documented for readers at `/method/`.
 
+## The Index
+
+`/places/` ranks jurisdictions on the same six axes, in the manner of the Global Open Data Index.
+Places nest — `data/places.yaml` defines the tree (id, title, level, parent) and every evaluation
+carries two keys:
+
+- `place` — the single jurisdiction whose data it is, used for "published here" counts
+- `places` — that jurisdiction plus every ancestor, which is what the taxonomy indexes, so a term
+  page automatically rolls up everything beneath it
+
+To add a jurisdiction, add a node to `data/places.yaml` and use its `title` in an evaluation. The
+`id` must equal the urlized `title` — it is the term page slug.
+
+Ranking happens only within a level, never across one. A place with no datasets of its own is
+flagged `derived`; a place resting on fewer than three is flagged `thin`.
+
 ## Adding an analysis
 
 ```bash

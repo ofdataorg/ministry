@@ -3,6 +3,7 @@ title: "GBIF Occurrence Records"
 date: 2026-07-11
 publishers: ["Global Biodiversity Information Facility"]
 regions: ["Global"]
+place: "Global"
 places: ["Global"]
 domains: ["Biodiversity", "Science"]
 licenses: ["CC0 / CC BY / CC BY-NC (mixed)"]

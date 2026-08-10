@@ -3,7 +3,8 @@ title: "Bologna Resident Population Series"
 date: 2026-07-30
 publishers: ["Comune di Bologna — U.I. Ufficio Comunale di Statistica"]
 regions: ["Europe"]
-places: ["Bologna"]
+place: "Bologna"
+places: ["European Union", "Italy", "Emilia-Romagna", "Bologna"]
 domains: ["Population", "Society"]
 licenses: ["CC BY 4.0"]
 

@@ -3,6 +3,7 @@ title: "Eurostat Database"
 date: 2026-06-05
 publishers: ["Eurostat"]
 regions: ["Europe"]
+place: "European Union"
 places: ["European Union"]
 domains: ["Economy", "Population", "Environment"]
 licenses: ["CC BY 4.0"]

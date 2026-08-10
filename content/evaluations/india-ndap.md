@@ -3,6 +3,7 @@ title: "NDAP — India's National Data and Analytics Platform"
 date: 2026-04-15
 publishers: ["NITI Aayog"]
 regions: ["Asia"]
+place: "India"
 places: ["India"]
 domains: ["Economy", "Population", "Governance"]
 licenses: ["Government Open Data Licence — India"]

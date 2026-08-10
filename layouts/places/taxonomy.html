@@ -1,39 +1,73 @@
 {{ define "main" }}
 {{ $axes := site.Params.scorecard.axes }}
-{{ $pages := .Pages }}
-{{ $score := partial "func/placescore.html" $pages }}
+{{ $roll := .Pages }}
+{{ $nodes := site.Data.places.nodes }}
+
+{{/* locate this place in the tree */}}
+{{ $self := false }}
+{{ range $nodes }}{{ if eq .title $.Title }}{{ $self = . }}{{ end }}{{ end }}
+{{ $own := where $roll "Params.place" .Title }}
+
+{{ $score := partial "func/placescore.html" $roll }}
 {{ $pct := mul $score 10 }}
 {{ $tier := "low" }}
 {{ if ge $score 7.8 }}{{ $tier = "high" }}{{ else if ge $score 5.8 }}{{ $tier = "mid" }}{{ end }}
 
-{{/* Rank this place against every other, using the same aggregation. */}}
-{{ $rank := 0 }}
-{{ $total := 0 }}
-{{ with site.GetPage "/places" }}
-  {{ $rows := slice }}
-  {{ range .Data.Terms.Alphabetical }}
-    {{ $rows = $rows | append (dict "title" .Page.Title "score" (partial "func/placescore.html" .Page.Pages)) }}
+{{/* ancestors, walked upward then reversed into general -> specific */}}
+{{ $trail := slice }}
+{{ if $self }}
+  {{ $cur := $self }}
+  {{ $ord := 0 }}
+  {{ range seq 6 }}
+    {{ with $cur.parent }}
+      {{ $found := where $nodes "id" $cur.parent }}
+      {{ if $found }}
+        {{ $p := index $found 0 }}
+        {{ $trail = $trail | append (dict "node" $p "ord" $ord) }}
+        {{ $cur = $p }}
+        {{ $ord = add $ord 1 }}
+      {{ end }}
+    {{ end }}
   {{ end }}
-  {{ $rows = sort $rows "score" "desc" }}
-  {{ $total = len $rows }}
-  {{ range $i, $r := $rows }}
-    {{ if eq $r.title $.Title }}{{ $rank = add $i 1 }}{{ end }}
-  {{ end }}
+  {{ $trail = sort $trail "ord" "desc" }}
 {{ end }}
 
-{{/* Strongest and weakest axis for the callout. */}}
+{{/* direct children */}}
+{{ $kids := slice }}
+{{ if $self }}{{ $kids = where $nodes "parent" $self.id }}{{ end }}
+
+{{/* rank among peers at the same level */}}
+{{ $rank := 0 }}{{ $peers := 0 }}
+{{ if $self }}
+  {{ $rows := slice }}
+  {{ range where $nodes "level" $self.level }}
+    {{ with site.GetPage (printf "/places/%s" .id) }}
+      {{ $rows = $rows | append (dict "title" .Title "score" (partial "func/placescore.html" .Pages)) }}
+    {{ end }}
+  {{ end }}
+  {{ $rows = sort $rows "score" "desc" }}
+  {{ $peers = len $rows }}
+  {{ range $i, $r := $rows }}{{ if eq $r.title $.Title }}{{ $rank = add $i 1 }}{{ end }}{{ end }}
+{{ end }}
+
 {{ $axisRows := slice }}
 {{ range $axes }}
-  {{ $axisRows = $axisRows | append (dict "axis" . "mean" (partial "func/axismean.html" (dict "pages" $pages "axis" .))) }}
+  {{ $axisRows = $axisRows | append (dict "axis" . "mean" (partial "func/axismean.html" (dict "pages" $roll "axis" .))) }}
 {{ end }}
 {{ $sorted := sort $axisRows "mean" "desc" }}
-{{ $best := index $sorted 0 }}
-{{ $worst := index $sorted (sub (len $sorted) 1) }}
 
 <header class="pagehead">
   <div class="wrap">
-    <p class="pagehead__kicker"><a href="{{ "places" | relURL }}">The Index</a><span class="pagehead__sep">/</span>Place</p>
+    <p class="pagehead__kicker">
+      <a href="{{ "places" | relURL }}">The Index</a>
+      {{ range $trail }}
+        <span class="pagehead__sep">/</span>
+        {{ with site.GetPage (printf "/places/%s" .node.id) }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ else }}{{ .node.title }}{{ end }}
+      {{ end }}
+      <span class="pagehead__sep">/</span>{{ .Title }}
+    </p>
     <h1 class="pagehead__title">{{ .Title }}</h1>
+    {{ if $self }}<p class="pagehead__meta">{{ $self.level }} jurisdiction</p>{{ end }}
 
     <div class="placecard">
       <div class="placecard__score placecard__score--{{ $tier }}">
@@ -41,23 +75,49 @@
         <span class="placecard__label">Index score</span>
       </div>
       <dl class="placecard__facts">
-        <div><dt>Rank</dt><dd>{{ $rank }} <span class="placecard__of">of {{ $total }}</span></dd></div>
-        <div><dt>Datasets evaluated</dt><dd>{{ len $pages }}</dd></div>
-        <div><dt>Strongest</dt><dd>{{ $best.axis | humanize }} <span class="placecard__of">{{ lang.FormatNumber 1 $best.mean }}</span></dd></div>
-        <div><dt>Weakest</dt><dd>{{ $worst.axis | humanize }} <span class="placecard__of">{{ lang.FormatNumber 1 $worst.mean }}</span></dd></div>
+        {{ if gt $peers 1 }}
+          <div><dt>Rank among {{ lower (index (where site.Data.places.levels "id" $self.level) 0).label }}</dt><dd>{{ $rank }} <span class="placecard__of">of {{ $peers }}</span></dd></div>
+        {{ else }}
+          <div><dt>Peers on file</dt><dd>None <span class="placecard__of">yet</span></dd></div>
+        {{ end }}
+        <div><dt>Published here</dt><dd>{{ len $own }}</dd></div>
+        <div><dt>Including nested</dt><dd>{{ len $roll }}</dd></div>
+        <div><dt>Weakest axis</dt><dd>{{ (index $sorted (sub (len $sorted) 1)).axis | humanize }} <span class="placecard__of">{{ lang.FormatNumber 1 (index $sorted (sub (len $sorted) 1)).mean }}</span></dd></div>
       </dl>
     </div>
 
-    {{ if lt (len $pages) 3 }}
-      <p class="placecard__thin">This score rests on {{ len $pages }} evaluation{{ if ne (len $pages) 1 }}s{{ end }}. Treat it as indicative, not as a ranking of everything {{ .Title }} publishes.</p>
+    {{ if lt (len $roll) 3 }}
+      <p class="placecard__thin">This score rests on {{ len $roll }} evaluation{{ if ne (len $roll) 1 }}s{{ end }}. Indicative only.</p>
     {{ end }}
   </div>
 </header>
 
 <div class="wrap band">
-  <div class="band__head">
+  {{ with $kids }}
+    <div class="band__head">
+      <h2 class="band__title">Nested within</h2>
+      <p class="band__note">Jurisdictions counted in the score above</p>
+    </div>
+    <ul class="peers__list peers__list--kids">
+      {{ range . }}
+        {{ with site.GetPage (printf "/places/%s" .id) }}
+          {{ $ks := partial "func/placescore.html" .Pages }}
+          {{ $kt := "low" }}{{ if ge $ks 7.8 }}{{ $kt = "high" }}{{ else if ge $ks 5.8 }}{{ $kt = "mid" }}{{ end }}
+          <li class="peers__item">
+            <span class="peers__rank">↳</span>
+            <a class="peers__name" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            <span class="peers__n">{{ len .Pages }}</span>
+            {{ partial "stack.html" (dict "score" $ks "label" .Title) }}
+            <span class="peers__score peers__score--{{ $kt }}">{{ lang.FormatNumber 0 (mul $ks 10) }}%</span>
+          </li>
+        {{ end }}
+      {{ end }}
+    </ul>
+  {{ end }}
+
+  <div class="band__head{{ if $kids }} band__head--spaced{{ end }}">
     <h2 class="band__title">Axis profile</h2>
-    <p class="band__note">Mean across {{ len $pages }} dataset{{ if ne (len $pages) 1 }}s{{ end }}</p>
+    <p class="band__note">Mean across {{ len $roll }} dataset{{ if ne (len $roll) 1 }}s{{ end }}</p>
   </div>
 
   <div class="axisprofile">
@@ -72,7 +132,10 @@
 
   <div class="band__head band__head--spaced">
     <h2 class="band__title">Dataset matrix</h2>
-    <p class="band__note">Every evaluation on file for {{ .Title }}</p>
+    <p class="band__note">
+      {{ if $own }}{{ len $own }} published by {{ .Title }}{{ end }}
+      {{ if gt (len $roll) (len $own) }}{{ if $own }}, {{ end }}{{ sub (len $roll) (len $own) }} from nested jurisdictions{{ end }}
+    </p>
   </div>
 
   <div class="table-scroll">
@@ -80,17 +143,17 @@
       <thead>
         <tr>
           <th scope="col">Dataset</th>
-          {{ range $axes }}
-            <th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>
-          {{ end }}
+          <th scope="col">Jurisdiction</th>
+          {{ range $axes }}<th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>{{ end }}
           <th class="index__score" scope="col">Grade</th>
         </tr>
       </thead>
       <tbody>
-        {{ range $pages.ByTitle }}
-          <tr>
+        {{ range $roll.ByTitle }}
+          {{ $p := . }}
+          <tr{{ if ne $p.Params.place $.Title }} class="index__row--nested"{{ end }}>
             <th class="index__place" scope="row"><a href="{{ .RelPermalink }}">{{ .Title }}</a></th>
-            {{ $p := . }}
+            <td class="index__jur">{{ $p.Params.place }}</td>
             {{ range $axes }}
               {{ $v := float (index $p.Params.scores . | default 0) }}
               <td class="index__axis">
@@ -106,8 +169,8 @@
   </div>
 
   <p class="index__caveat">
-    Cells are the raw axis scores from each evaluation, unweighted. Read the review before quoting a
-    number — the reasoning is what the score is for.
+    Rows in grey are published by a jurisdiction nested inside {{ .Title }} and counted in its score.
+    Cells are raw axis scores, unweighted — read the review before quoting a number.
   </p>
 </div>
 {{ end }}

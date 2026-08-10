@@ -1,8 +1,9 @@
 ---
 title: "The Index"
-description: "Every place we have evaluated, ranked on the same six axes, with the working one click away."
+description: "Every jurisdiction we have evaluated, nested by level of government and ranked only against its peers."
 ---
 
-Places ranked by the mean score of their evaluated datasets. This is a measure of the datasets we
-have put through the scorecard — not of everything a jurisdiction publishes — so read the dataset
-count before you read the rank.
+Jurisdictions nest: a commune sits inside a region, inside a state, inside a union. So the tree below
+shows containment — a place's score covers everything published beneath it — while the league tables
+rank each place only against others at its own level of government. A city is not comparable to a
+union of twenty-seven states, and we do not pretend otherwise.
