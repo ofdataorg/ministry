@@ -3,6 +3,7 @@ title: "Copernicus Sentinel-2 Level-2A"
 date: 2026-06-30
 publishers: ["European Space Agency", "European Commission"]
 regions: ["Global", "Europe"]
+places: ["Global"]
 domains: ["Earth Observation", "Climate", "Agriculture"]
 licenses: ["Copernicus Open Licence"]
 

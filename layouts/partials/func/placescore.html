@@ -1,0 +1,12 @@
+{{- /* Overall score for a place: the mean of its datasets' six-axis means.
+       Equal weight throughout, same as /method/ — no hidden weighting. */ -}}
+{{- $pages := . -}}
+{{- $sum := 0.0 -}}
+{{- $n := 0 -}}
+{{- range $pages -}}
+  {{- $sum = add $sum (partial "func/score.html" .) -}}
+  {{- $n = add $n 1 -}}
+{{- end -}}
+{{- $avg := 0.0 -}}
+{{- if gt $n 0 -}}{{- $avg = div $sum (float $n) -}}{{- end -}}
+{{- return $avg -}}

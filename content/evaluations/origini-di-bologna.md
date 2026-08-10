@@ -3,6 +3,7 @@ title: "Origini di Bologna — Historic Building Survey"
 date: 2026-07-30
 publishers: ["Comune di Bologna"]
 regions: ["Europe"]
+places: ["Bologna"]
 domains: ["Society", "Geospatial"]
 licenses: ["CC BY 4.0"]
 

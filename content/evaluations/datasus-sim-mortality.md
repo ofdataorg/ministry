@@ -3,6 +3,7 @@ title: "DATASUS SIM — Brazilian Mortality Information System"
 date: 2026-05-28
 publishers: ["Ministério da Saúde (DATASUS)"]
 regions: ["South America"]
+places: ["Brazil"]
 domains: ["Health", "Population"]
 licenses: ["Open, terms not clearly stated"]
 

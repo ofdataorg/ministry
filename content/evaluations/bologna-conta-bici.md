@@ -3,6 +3,7 @@ title: "Bologna Bicycle Counters"
 date: 2026-07-30
 publishers: ["Comune di Bologna"]
 regions: ["Europe"]
+places: ["Bologna"]
 domains: ["Mobility"]
 licenses: ["CC BY 4.0"]
 

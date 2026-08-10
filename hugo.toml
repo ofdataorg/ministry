@@ -9,6 +9,7 @@ summaryLength = 30
   pagerSize = 12
 
 [taxonomies]
+  place = 'places'
   region = 'regions'
   domain = 'domains'
   publisher = 'publishers'
@@ -39,6 +40,10 @@ summaryLength = 30
     name = 'Analyses'
     pageRef = '/analyses'
     weight = 20
+  [[menus.main]]
+    name = 'Index'
+    pageRef = '/places'
+    weight = 25
   [[menus.main]]
     name = 'Regions'
     pageRef = '/regions'

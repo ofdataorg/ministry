@@ -3,6 +3,7 @@ title: "e-Stat — Portal Site of Official Statistics of Japan"
 date: 2026-05-19
 publishers: ["Statistics Bureau of Japan"]
 regions: ["Asia"]
+places: ["Japan"]
 domains: ["Economy", "Population"]
 licenses: ["Japan Government Standard Terms (CC BY 4.0 compatible)"]
 

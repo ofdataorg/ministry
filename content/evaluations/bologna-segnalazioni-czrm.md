@@ -3,6 +3,7 @@ title: "Bologna Citizen Reports (CZRM)"
 date: 2026-07-30
 publishers: ["Comune di Bologna — Dipartimento Cura e Qualità del Territorio"]
 regions: ["Europe"]
+places: ["Bologna"]
 domains: ["Governance", "Society"]
 licenses: ["CC BY 4.0"]
 

@@ -1,0 +1,103 @@
+{{ define "main" }}
+{{ $axes := site.Params.scorecard.axes }}
+{{ $all := where site.RegularPages "Type" "evaluations" }}
+
+{{/* Build one row per place, then rank by overall score. */}}
+{{ $rows := slice }}
+{{ range .Data.Terms.Alphabetical }}
+  {{ $pages := .Page.Pages }}
+  {{ $rows = $rows | append (dict
+      "page"  .Page
+      "count" .Count
+      "pages" $pages
+      "score" (partial "func/placescore.html" $pages)) }}
+{{ end }}
+{{ $rows = sort $rows "score" "desc" }}
+
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker">The Index · {{ len $rows }} places · {{ len $all }} datasets</p>
+    <h1 class="pagehead__title">{{ .Title }}</h1>
+    {{ with .Content }}<div class="pagehead__lede">{{ . }}</div>{{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  <div class="legend">
+    <p class="legend__title">How to read a row</p>
+    <ul class="legend__keys">
+      {{ range $axes }}
+        <li><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr> {{ . | humanize }}</li>
+      {{ end }}
+    </ul>
+    <p class="legend__note">
+      Each bar is ten segments, one point each. Filled segments are the mean score for that axis
+      across the place's datasets. <span class="legend__swatch legend__swatch--high"></span> 7.8+
+      <span class="legend__swatch legend__swatch--mid"></span> 5.8–7.7
+      <span class="legend__swatch legend__swatch--low"></span> below 5.8
+    </p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="index">
+      <thead>
+        <tr>
+          <th class="index__rank" scope="col">#</th>
+          <th scope="col">Place</th>
+          <th class="index__n" scope="col"><abbr title="Datasets evaluated">N</abbr></th>
+          <th class="index__score" scope="col">Score</th>
+          {{ range $axes }}
+            <th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>
+          {{ end }}
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $i, $r := $rows }}
+          {{ $pct := mul $r.score 10 }}
+          {{ $tier := "low" }}
+          {{ if ge $r.score 7.8 }}{{ $tier = "high" }}{{ else if ge $r.score 5.8 }}{{ $tier = "mid" }}{{ end }}
+          <tr{{ if lt $r.count 3 }} class="index__row--thin"{{ end }}>
+            <td class="index__rank">{{ add $i 1 }}</td>
+            <th class="index__place" scope="row">
+              <a href="{{ $r.page.RelPermalink }}">{{ $r.page.Title }}</a>
+              {{ if lt $r.count 3 }}<span class="index__flag" title="Fewer than three datasets — treat this score as indicative only">thin</span>{{ end }}
+            </th>
+            <td class="index__n">{{ $r.count }}</td>
+            <td class="index__score index__score--{{ $tier }}">{{ lang.FormatNumber 0 $pct }}<span class="index__pc">%</span></td>
+            {{ range $axes }}
+              <td class="index__axis">
+                {{ partial "stack.html" (dict
+                    "score" (partial "func/axismean.html" (dict "pages" $r.pages "axis" .))
+                    "label" (printf "%s — %s" $r.page.Title (. | humanize))) }}
+              </td>
+            {{ end }}
+          </tr>
+        {{ end }}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="index__rank"></td>
+          <th class="index__place" scope="row">Whole catalogue</th>
+          <td class="index__n">{{ len $all }}</td>
+          <td class="index__score">{{ lang.FormatNumber 0 (mul (partial "func/placescore.html" $all) 10) }}<span class="index__pc">%</span></td>
+          {{ range $axes }}
+            <td class="index__axis">
+              {{ partial "stack.html" (dict
+                  "score" (partial "func/axismean.html" (dict "pages" $all "axis" .))
+                  "label" (printf "Catalogue — %s" (. | humanize))) }}
+            </td>
+          {{ end }}
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p class="index__caveat">
+    A place's score is the plain mean of its datasets' six-axis means — no weighting, same as
+    <a href="{{ "method" | relURL }}">the rubric</a>. It measures <em>the datasets we have
+    evaluated</em>, not everything a jurisdiction publishes, so a place with one dataset is not
+    comparable to one with ten. Rows resting on fewer than three evaluations are flagged
+    <span class="index__flag">thin</span>.
+  </p>
+</div>
+{{ end }}

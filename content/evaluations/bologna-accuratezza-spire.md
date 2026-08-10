@@ -3,6 +3,7 @@ title: "Bologna Traffic Loop Accuracy"
 date: 2026-07-30
 publishers: ["Comune di Bologna"]
 regions: ["Europe"]
+places: ["Bologna"]
 domains: ["Mobility", "Governance"]
 licenses: ["CC BY 4.0"]
 

@@ -3,6 +3,7 @@ title: "American Community Survey"
 date: 2026-06-14
 publishers: ["United States Census Bureau"]
 regions: ["North America"]
+places: ["United States"]
 domains: ["Population", "Economy", "Housing"]
 licenses: ["US Public Domain"]
 

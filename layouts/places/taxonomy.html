@@ -1,0 +1,113 @@
+{{ define "main" }}
+{{ $axes := site.Params.scorecard.axes }}
+{{ $pages := .Pages }}
+{{ $score := partial "func/placescore.html" $pages }}
+{{ $pct := mul $score 10 }}
+{{ $tier := "low" }}
+{{ if ge $score 7.8 }}{{ $tier = "high" }}{{ else if ge $score 5.8 }}{{ $tier = "mid" }}{{ end }}
+
+{{/* Rank this place against every other, using the same aggregation. */}}
+{{ $rank := 0 }}
+{{ $total := 0 }}
+{{ with site.GetPage "/places" }}
+  {{ $rows := slice }}
+  {{ range .Data.Terms.Alphabetical }}
+    {{ $rows = $rows | append (dict "title" .Page.Title "score" (partial "func/placescore.html" .Page.Pages)) }}
+  {{ end }}
+  {{ $rows = sort $rows "score" "desc" }}
+  {{ $total = len $rows }}
+  {{ range $i, $r := $rows }}
+    {{ if eq $r.title $.Title }}{{ $rank = add $i 1 }}{{ end }}
+  {{ end }}
+{{ end }}
+
+{{/* Strongest and weakest axis for the callout. */}}
+{{ $axisRows := slice }}
+{{ range $axes }}
+  {{ $axisRows = $axisRows | append (dict "axis" . "mean" (partial "func/axismean.html" (dict "pages" $pages "axis" .))) }}
+{{ end }}
+{{ $sorted := sort $axisRows "mean" "desc" }}
+{{ $best := index $sorted 0 }}
+{{ $worst := index $sorted (sub (len $sorted) 1) }}
+
+<header class="pagehead">
+  <div class="wrap">
+    <p class="pagehead__kicker"><a href="{{ "places" | relURL }}">The Index</a><span class="pagehead__sep">/</span>Place</p>
+    <h1 class="pagehead__title">{{ .Title }}</h1>
+
+    <div class="placecard">
+      <div class="placecard__score placecard__score--{{ $tier }}">
+        <span class="placecard__pct">{{ lang.FormatNumber 0 $pct }}<span class="placecard__unit">%</span></span>
+        <span class="placecard__label">Index score</span>
+      </div>
+      <dl class="placecard__facts">
+        <div><dt>Rank</dt><dd>{{ $rank }} <span class="placecard__of">of {{ $total }}</span></dd></div>
+        <div><dt>Datasets evaluated</dt><dd>{{ len $pages }}</dd></div>
+        <div><dt>Strongest</dt><dd>{{ $best.axis | humanize }} <span class="placecard__of">{{ lang.FormatNumber 1 $best.mean }}</span></dd></div>
+        <div><dt>Weakest</dt><dd>{{ $worst.axis | humanize }} <span class="placecard__of">{{ lang.FormatNumber 1 $worst.mean }}</span></dd></div>
+      </dl>
+    </div>
+
+    {{ if lt (len $pages) 3 }}
+      <p class="placecard__thin">This score rests on {{ len $pages }} evaluation{{ if ne (len $pages) 1 }}s{{ end }}. Treat it as indicative, not as a ranking of everything {{ .Title }} publishes.</p>
+    {{ end }}
+  </div>
+</header>
+
+<div class="wrap band">
+  <div class="band__head">
+    <h2 class="band__title">Axis profile</h2>
+    <p class="band__note">Mean across {{ len $pages }} dataset{{ if ne (len $pages) 1 }}s{{ end }}</p>
+  </div>
+
+  <div class="axisprofile">
+    {{ range $sorted }}
+      <div class="axisprofile__row">
+        <span class="axisprofile__name">{{ .axis | humanize }}</span>
+        {{ partial "stack.html" (dict "score" .mean "label" (.axis | humanize)) }}
+        <span class="axisprofile__val">{{ lang.FormatNumber 1 .mean }}</span>
+      </div>
+    {{ end }}
+  </div>
+
+  <div class="band__head band__head--spaced">
+    <h2 class="band__title">Dataset matrix</h2>
+    <p class="band__note">Every evaluation on file for {{ .Title }}</p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="index index--matrix">
+      <thead>
+        <tr>
+          <th scope="col">Dataset</th>
+          {{ range $axes }}
+            <th class="index__axis" scope="col"><abbr title="{{ . | humanize }}">{{ substr . 0 3 | upper }}</abbr></th>
+          {{ end }}
+          <th class="index__score" scope="col">Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range $pages.ByTitle }}
+          <tr>
+            <th class="index__place" scope="row"><a href="{{ .RelPermalink }}">{{ .Title }}</a></th>
+            {{ $p := . }}
+            {{ range $axes }}
+              {{ $v := float (index $p.Params.scores . | default 0) }}
+              <td class="index__axis">
+                {{ partial "stack.html" (dict "score" $v "label" (printf "%s — %s" $p.Title (. | humanize))) }}
+                <span class="index__cellval">{{ lang.FormatNumber 0 $v }}</span>
+              </td>
+            {{ end }}
+            <td class="index__grade">{{ partial "badge.html" . }}</td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="index__caveat">
+    Cells are the raw axis scores from each evaluation, unweighted. Read the review before quoting a
+    number — the reasoning is what the score is for.
+  </p>
+</div>
+{{ end }}

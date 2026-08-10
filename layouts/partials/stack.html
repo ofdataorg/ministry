@@ -1,0 +1,13 @@
+{{- /* A ten-segment availability stack — the Index's unit of measurement.
+       dict "score" 0-10 "label" "axis name" */ -}}
+{{- $s := float .score -}}
+{{- $filled := int (math.Round $s) -}}
+{{- $tier := "low" -}}
+{{- if ge $s 7.8 }}{{ $tier = "high" }}{{ else if ge $s 5.8 }}{{ $tier = "mid" }}{{ end -}}
+<span class="stack stack--{{ $tier }}" role="img"
+      aria-label="{{ .label }}: {{ lang.FormatNumber 1 $s }} out of 10"
+      title="{{ .label }}: {{ lang.FormatNumber 1 $s }}/10">
+  {{- range seq 10 -}}
+    <i class="stack__seg{{ if le . $filled }} is-on{{ end }}" aria-hidden="true"></i>
+  {{- end -}}
+</span>

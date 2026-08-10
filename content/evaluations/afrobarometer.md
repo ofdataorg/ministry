@@ -3,6 +3,7 @@ title: "Afrobarometer"
 date: 2026-05-08
 publishers: ["Afrobarometer"]
 regions: ["Africa"]
+places: ["Pan-African"]
 domains: ["Governance", "Society"]
 licenses: ["Free for non-commercial use, registration required"]
 

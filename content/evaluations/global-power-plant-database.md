@@ -3,6 +3,7 @@ title: "Global Power Plant Database"
 date: 2026-07-18
 publishers: ["World Resources Institute"]
 regions: ["Global"]
+places: ["Global"]
 domains: ["Energy", "Climate"]
 licenses: ["CC BY 4.0"]
 

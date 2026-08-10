@@ -1,0 +1,13 @@
+{{- /* Mean of one scorecard axis across a set of pages. dict "pages" X "axis" Y */ -}}
+{{- $axis := .axis -}}
+{{- $sum := 0.0 -}}
+{{- $n := 0 -}}
+{{- range .pages -}}
+  {{- with (index .Params.scores $axis) -}}
+    {{- $sum = add $sum (float .) -}}
+    {{- $n = add $n 1 -}}
+  {{- end -}}
+{{- end -}}
+{{- $avg := 0.0 -}}
+{{- if gt $n 0 -}}{{- $avg = div $sum (float $n) -}}{{- end -}}
+{{- return $avg -}}

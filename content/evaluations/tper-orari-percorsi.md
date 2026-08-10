@@ -3,6 +3,7 @@ title: "TPER Bus Timetables and Routes"
 date: 2026-07-30
 publishers: ["Comune di Bologna — Innovazione Digitale e Dati"]
 regions: ["Europe"]
+places: ["Bologna"]
 domains: ["Mobility"]
 licenses: ["CC BY 4.0"]
 
