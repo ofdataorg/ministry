@@ -1,13 +1,2 @@
 {{- /* Returns the mean of a page's scorecard axes as a float 0–10. */ -}}
-{{- $scores := .Params.scores -}}
-{{- $sum := 0.0 -}}
-{{- $n := 0 -}}
-{{- range site.Params.scorecard.axes -}}
-  {{- with (index $scores .) -}}
-    {{- $sum = add $sum (float .) -}}
-    {{- $n = add $n 1 -}}
-  {{- end -}}
-{{- end -}}
-{{- $avg := 0.0 -}}
-{{- if gt $n 0 -}}{{- $avg = div $sum (float $n) -}}{{- end -}}
-{{- return $avg -}}
+{{- return (partial "func/scoremap.html" .Params.scores) -}}

@@ -1132,15 +1132,19 @@ a.tag:hover { background: var(--accent-bg); border-color: var(--accent-bg); colo
   -webkit-mask-position: center;  mask-position: center;
   -webkit-mask-size: contain;     mask-size: contain;
 }
+/* The mask URLs arrive as custom properties from the template, where
+   Hugo fingerprints them. A stable filename would be cached by the CDN
+   and the browser for hours after the artwork changed — which is
+   exactly what happened the first time the emblem was replaced. */
 .logo--crest {
   aspect-ratio: 320 / 318;
-  -webkit-mask-image: url("../logo/crest.png");
-  mask-image: url("../logo/crest.png");
+  -webkit-mask-image: var(--logo-crest);
+  mask-image: var(--logo-crest);
 }
 .logo--lockup {
   aspect-ratio: 700 / 1031;
-  -webkit-mask-image: url("../logo/lockup@2x.png");
-  mask-image: url("../logo/lockup@2x.png");
+  -webkit-mask-image: var(--logo-lockup);
+  mask-image: var(--logo-lockup);
 }
 /* If masking is unsupported the mark would be a solid block —
    fall back to nothing rather than to a navy rectangle. */

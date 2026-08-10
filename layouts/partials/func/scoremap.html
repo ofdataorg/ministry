@@ -1,0 +1,15 @@
+{{- /* Mean of a six-axis scores map. The single place a set of axis
+       values becomes a number — history entries go through it too, so a
+       past grade is computed exactly like a present one, never asserted. */ -}}
+{{- $scores := . -}}
+{{- $sum := 0.0 -}}
+{{- $n := 0 -}}
+{{- range site.Params.scorecard.axes -}}
+  {{- with (index $scores .) -}}
+    {{- $sum = add $sum (float .) -}}
+    {{- $n = add $n 1 -}}
+  {{- end -}}
+{{- end -}}
+{{- $avg := 0.0 -}}
+{{- if gt $n 0 -}}{{- $avg = div $sum (float $n) -}}{{- end -}}
+{{- return $avg -}}

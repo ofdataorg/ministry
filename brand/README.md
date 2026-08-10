@@ -9,9 +9,14 @@ silhouettes, which is what lets the site draw them as a CSS mask filled with the
 ink: the source colour is irrelevant, so the mark renders navy in light mode and warm
 off-white in dark from one file. Everything in `static/logo/` is derived from it:
 
-    crest.png            emblem only, no wordmark — masthead and footer mask
-    lockup@2x.png        the full portrait lockup — hero mask
-    static/favicon.png   arms, squared and padded
+    assets/logo/crest.png    emblem only, no wordmark — masthead and footer mask
+    assets/logo/lockup.png   the full portrait lockup — hero mask
+    assets/favicon.png       emblem, squared and padded
+
+These live in `assets/`, not `static/`, so Hugo fingerprints them. The masks are handed to
+the stylesheet as `--logo-crest` / `--logo-lockup` custom properties from `head.html`. A
+stable filename gets cached by the CDN and the browser for hours after the artwork changes,
+which is exactly what went wrong the first time the emblem was replaced.
 
 The two logo files are used as CSS `mask-image` and filled with the current ink, so one
 asset serves both light and dark. Sizes are chosen for the largest place each is drawn:
@@ -21,10 +26,10 @@ To regenerate after editing the master:
 
     convert brand/ministry-of-data-emblem.png -trim +repage /tmp/trim.png
     convert /tmp/trim.png -crop 1006x1000+0+0 +repage -trim +repage /tmp/emblem.png
-    convert /tmp/emblem.png -resize 320x -strip -colors 32 static/logo/crest.png
-    convert /tmp/trim.png   -resize 700x -strip -colors 32 static/logo/lockup@2x.png
+    convert /tmp/emblem.png -resize 320x -strip -colors 32 assets/logo/crest.png
+    convert /tmp/trim.png   -resize 700x -strip -colors 32 assets/logo/lockup.png
     convert /tmp/emblem.png -resize 112x -background none -gravity center \
-            -extent 128x128 -strip -colors 24 static/favicon.png
+            -extent 128x128 -strip -colors 24 assets/favicon.png
 
 The crop height (1000) is the blank gutter between the emblem and the wordmark; re-find it
 if the artwork changes.

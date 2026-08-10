@@ -25,7 +25,11 @@
 <link rel="preload" href="{{ "fonts/libre-caslon-text-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "fonts/libre-caslon-display-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "fonts/public-sans-600.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/png">
+{{ $crest := resources.Get "logo/crest.png" | fingerprint }}
+{{ $lockup := resources.Get "logo/lockup.png" | fingerprint }}
+{{ $icon := resources.Get "favicon.png" | fingerprint }}
+<style>:root{--logo-crest:url("{{ $crest.RelPermalink }}");--logo-lockup:url("{{ $lockup.RelPermalink }}")}</style>
+<link rel="icon" href="{{ $icon.RelPermalink }}" type="image/png">
 <meta name="color-scheme" content="light dark">
 <script>
 (function () {

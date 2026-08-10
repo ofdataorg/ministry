@@ -19,7 +19,7 @@ summaryLength = 30
   repo = 'https://github.com/ofdataorg/ministry'
   description = 'Independent evaluations and analyses of open datasets from all over the world.'
   strapline = 'Evaluations & analyses of open data, worldwide'
-  established = 1998
+  established = 2015
   issue = 'VOL. 01'
   ticker = [
     'INDEPENDENT DATASET EVALUATIONS',
