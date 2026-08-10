@@ -13,4 +13,4 @@ back to that evaluation.
 A record is a starting point, not a verdict. When one of these turns out to be worth a real
 judgement, it gets [evaluated](/evaluations/) properly — downloaded in depth, read against its own
 documentation, scored on the six axes and argued in prose — and the record is retired in favour of
-the evaluation. Eight have made that move so far.
+the evaluation. Sixteen have made that move so far.
