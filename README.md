@@ -78,32 +78,29 @@ static/fonts/   Anton, Barlow Condensed, Literata, Spline Sans Mono (latin subse
 Full design context — audience, brand personality, principles — lives in `.impeccable.md` and is
 mirrored into `CLAUDE.md`. Read it before changing anything visual.
 
-Late-nineties compilation-sleeve logic applied to dataset reviews: black stock, hazard stripes,
-hand-set headlines, a numbered tracklist, scorecards drawn as EQ faders. The governing rule is
-**loud shell, calm core** — full volume on the furniture, quiet and generously led in the article
-body, because the reviews run 500+ words.
+The register is a **government Command Paper**: warm off-white stock, navy ink sampled from the
+crest (`#051A38`), hairline and double rules, the arms at the top and numbered entries below. The
+joke is the gap between the wrapper and the contents — the presentation is straight-faced
+officialdom, the verdicts are not. Nothing is styled to signal parody; the comedy only works if the
+paper is played completely straight.
 
-**Colour** is OKLCH throughout, so equal steps in lightness look equal. Neutrals are tinted toward
-the brand hue (32°, red-orange) rather than the reflexive cool blue, which makes the greys and the
-accent read as one material. `--hot` is for text on black; `--hot-deep` carries white text. Every
-foreground/background pair in the palette clears WCAG AA.
+**Colour** is OKLCH throughout. Papers are tinted warm (85°) so they read as stock rather than as a
+screen; ink and greys are tinted toward the crest's hue. The seal red is used like a rubber stamp —
+corrections, failed axes, warnings, links — never as decoration. Every foreground/background pair
+clears WCAG AA, the tightest being 4.87:1.
 
-**Chrome is a seal, not a style.** Metallic fill is restricted to three elements — the masthead
-wordmark, the hero H1 and the scorecard grade seal. It is deliberately absent from body text, nav,
-labels, buttons and the stat figures, which are solid ink. Spreading it further turns a mark of
-authority into wallpaper.
+**Type** pairs Caslon with a government sans: Libre Caslon Display for headings and figures, Libre
+Caslon Text for reading, Public Sans for UI and tables, Spline Sans Mono for scores. Caslon is the
+historic face of British state printing and Public Sans is literally a government typeface — the
+choices are the concept, not decoration.
 
-**Type** pairs a heavy condensed display face with a serif body: Anton for headlines, Barlow
-Condensed for UI and track titles, Literata for reading, Spline Sans Mono for data and numerals.
-A serif body on a data site is against the reflex, and that is the point — it gives the
-print-journalism register that partisan criticism needs.
+**The arms** are in `brand/`, with derivation commands in `brand/README.md`. They are dark ink on
+transparency, which is why the site is light: the mark cannot exist on a black page.
 
-**Tokens**: a 4pt spacing scale with semantic names (`--space-sm`, not `--spacing-8`), a five-step
-type scale at roughly 1.28 ratio, fluid `clamp()` only where type is genuinely display-scale, and
-exponential ease-out curves. Nothing animates a layout property. Components that need to respond to
-their column rather than the viewport use `@container`.
-
-Animation is suppressed under `prefers-reduced-motion`, and there is a print stylesheet.
+**Tokens**: a 4pt spacing scale with semantic names, a six-step type scale, exponential ease-out
+curves. Nothing animates a layout property. Components that need to respond to their column rather
+than the viewport use `@container`. Animation is suppressed under `prefers-reduced-motion`, and the
+print stylesheet leans into what the screen design already is.
 
 ## Content
 

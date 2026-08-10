@@ -3,15 +3,15 @@
 {{ $analyses := where site.RegularPages "Type" "analyses" }}
 
 <section class="hero">
-  <div class="hero__bg" aria-hidden="true"></div>
   <div class="wrap hero__in">
     <p class="hero__eyebrow"><span class="tag tag--hot">{{ site.Params.issue }}</span> The open-data review</p>
 
     <h1 class="hero__title">
-      <span class="chrome">Ministry</span>
-      <span class="hero__of">of</span>
-      <span class="chrome">Data</span>
+      <span class="hero__lockup">{{ partial "logo.html" (dict "variant" "lockup" "alt" "") }}</span>
+      <span class="visually-hidden">Ministry of Data</span>
     </h1>
+
+    <div class="hero__rule" aria-hidden="true"></div>
 
     <p class="hero__lede">{{ site.Params.description }} Scored on six axes, argued in full, and never a number without its working.</p>
 

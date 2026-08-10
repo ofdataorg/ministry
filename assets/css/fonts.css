@@ -1,52 +1,60 @@
 /* Self-hosted faces (latin subset) — no external requests at runtime.
-   Paths are relative to the bundled stylesheet at /css/, so they survive
-   a subpath baseURL like /ministry/.
+   Paths are relative to the bundled stylesheet at /css/.
 
-   Anton      display  — the flyer voice
-   Barlow Cd. UI       — labels, nav, track titles
-   Literata   body     — long-form reading, holds up on black
-   Spline Mono data    — numerals, metadata, scorecard values */
+   Libre Caslon Display  masthead + display — Caslon is the historic
+                         face of British state printing
+   Libre Caslon Text     body — the same voice, cut for reading
+   Public Sans           UI, labels, tables — a government typeface,
+                         deadpan by design
+   Spline Sans Mono      figures, references, scores */
 @font-face {
-  font-family: 'Anton';
+  font-family: 'Libre Caslon Display';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(../fonts/anton-400.woff2) format('woff2');
+  src: url(../fonts/libre-caslon-display-400.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'Barlow Condensed';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url(../fonts/barlow-condensed-500.woff2) format('woff2');
-}
-@font-face {
-  font-family: 'Barlow Condensed';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url(../fonts/barlow-condensed-700.woff2) format('woff2');
-}
-@font-face {
-  font-family: 'Literata';
+  font-family: 'Libre Caslon Text';
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(../fonts/literata-400-italic.woff2) format('woff2');
+  src: url(../fonts/libre-caslon-text-400-italic.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'Literata';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(../fonts/literata-400.woff2) format('woff2');
+  src: url(../fonts/libre-caslon-text-400.woff2) format('woff2');
 }
 @font-face {
-  font-family: 'Literata';
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../fonts/libre-caslon-text-700.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/public-sans-400.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(../fonts/literata-600.woff2) format('woff2');
+  src: url(../fonts/public-sans-600.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../fonts/public-sans-700.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Spline Sans Mono';

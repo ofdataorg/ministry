@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ site.Title }} — {{ site.Params.strapline }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsHome }}{{ site.Params.description }}{{ else }}{{ .Summary | plainify | truncate 160 }}{{ end }}{{ end }}">
-<meta name="theme-color" content="#08090c">
+<meta name="theme-color" content="#fbfaf7">
 
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:site_name" content="{{ site.Title }}">
@@ -21,8 +21,8 @@
 {{ $css := slice $fonts $main | resources.Concat "css/bundle.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 
-<link rel="preload" href="{{ "fonts/anton-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ "fonts/barlow-condensed-700.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ "fonts/literata-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="preload" href="{{ "fonts/libre-caslon-text-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/libre-caslon-display-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/public-sans-600.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="{{ "favicon.png" | relURL }}" type="image/png">
 <script>document.documentElement.classList.replace('no-js','js');</script>

@@ -15,7 +15,7 @@
 <header class="masthead">
   <div class="wrap masthead__in">
     <a class="brand" href="{{ site.Home.RelPermalink }}">
-      {{ partial "logo.html" . }}
+      {{ partial "logo.html" (dict "variant" "crest" "alt" "") }}
       <span class="brand__text">
         <span class="brand__name">Ministry<span class="brand__of"> of </span>Data</span>
         <span class="brand__sub">{{ site.Params.strapline }}</span>
